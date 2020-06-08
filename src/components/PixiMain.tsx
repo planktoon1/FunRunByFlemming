@@ -33,13 +33,6 @@ const PixiMain: React.FC = () => {
   return (
     <>
       <RunningMan frames={runningFrames} />
-      <RunningMan frames={runningFrames} />
-      <RunningMan frames={runningFrames} />
-      <RunningMan frames={runningFrames} />
-      <RunningMan frames={runningFrames} />
-      <RunningMan frames={runningFrames} />
-      <RunningMan frames={runningFrames} />
-      <RunningMan frames={runningFrames} />
     </>
   );
 };

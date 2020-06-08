@@ -1,7 +1,9 @@
 import { AnimatedSprite, Container, useApp, useTick } from "@inlet/react-pixi";
+import cloneDeep from "lodash.clonedeep";
 import * as PIXI from "pixi.js";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { rotateToPoint } from "../utility/pixi/rotateToPoint";
+import { randomNumber } from "../utility/randomNumber";
 
 // Generate a list of colors
 const Rainbow = require("rainbowvis.js");
@@ -19,41 +21,50 @@ interface Params {
 
 const RunningMan: React.FC<Params> = ({ frames }) => {
   const app = useApp();
-  const [pos, setPos] = useState({ ...getRanPosOutOfScreen() });
-  const [rot, setRot] = useState(0);
-  const [speed, setSpeed] = useState(3 + Math.random() * 3);
-  const [tint, setTint] = useState(
-    COLORS[Math.floor(Math.random() * COLORS.length)]
-  );
 
-  const scale = 0.5;
-  const resetDistance = 60 * scale;
+  const [men, setMen] = useState<Man[]>([]);
+
+  useEffect(() => {
+    // On click event handler
+    const onMouseClick = (event) => {
+      // spawn a dude at a random pos, have him run towards where the mouse clicked
+      const mouseX = app.renderer.plugins.interaction.mouse.global.x;
+      const mouseY = app.renderer.plugins.interaction.mouse.global.y;
+
+      const spawnPoint = getRanPosOutsideScreenSquare();
+
+      const newMan = {
+        speed: 3 + Math.random() * 3,
+        scale: 0.5,
+        tint: COLORS[Math.floor(Math.random() * COLORS.length)],
+        rotation: rotateToPoint(mouseX, mouseY, spawnPoint.x, spawnPoint.y),
+        ...spawnPoint,
+      };
+
+      setMen((men) => [...men, newMan]);
+    };
+    document.addEventListener("click", onMouseClick);
+    return () => {
+      window.removeEventListener("click", onMouseClick);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useTick((delta) => {
-    const mouseX = app.renderer.plugins.interaction.mouse.global.x;
-    const mouseY = app.renderer.plugins.interaction.mouse.global.y;
-
-    const newRot = rotateToPoint(mouseX, mouseY, pos.x, pos.y);
-    let newX = pos.x + Math.cos(newRot) * speed * delta!;
-    let newY = pos.y + Math.sin(newRot) * speed * delta!;
-    if (
-      Math.abs(newY - mouseY) < resetDistance &&
-      Math.abs(newX - mouseX) < resetDistance
-    ) {
-      // move to random position outside of screen
-
-      const newPos = getRanPosOutOfScreen();
-      newX = newPos.x;
-      newY = newPos.y;
-      setSpeed(3 + Math.random() * 3);
-      setTint(COLORS[Math.floor(Math.random() * COLORS.length)]);
+    const clonedMen = cloneDeep(men);
+    let i = 0;
+    for (const man of clonedMen) {
+      let newX = man.x + Math.cos(man.rotation) * man.speed * delta!;
+      let newY = man.y + Math.sin(man.rotation) * man.speed * delta!;
+      if (isPointOutsideScreen(man.x, man.y)) {
+        // Delete man
+        clonedMen.splice(i, 1);
+      }
+      man.x = newX;
+      man.y = newY;
+      i++;
     }
-
-    setRot(newRot + Math.PI * 0.5);
-    setPos({
-      x: newX,
-      y: newY,
-    });
+    setMen(clonedMen);
   });
 
   if (frames.length === 0) {
@@ -61,29 +72,86 @@ const RunningMan: React.FC<Params> = ({ frames }) => {
   }
 
   return (
-    <Container rotation={rot} {...pos}>
-      <AnimatedSprite
-        animationSpeed={0.05 + 0.02 * speed}
-        isPlaying={true}
-        textures={frames}
-        anchor={0.5}
-        scale={scale}
-        tint={tint}
-      />
+    <Container>
+      {men.map((man, i) => {
+        return (
+          <Container
+            key={i}
+            rotation={man.rotation + Math.PI * 0.5}
+            x={man.x}
+            y={man.y}
+          >
+            <AnimatedSprite
+              animationSpeed={0.05 + 0.02 * man.speed}
+              isPlaying={true}
+              textures={frames}
+              anchor={0.5}
+              scale={man.scale}
+              tint={man.tint}
+            />
+          </Container>
+        );
+      })}
     </Container>
   );
 };
 
-function getRanPosOutOfScreen() {
-  const midX = window.innerWidth / 2;
-  const midY = window.innerHeight / 2;
-  const angle = Math.random() * Math.PI * 2;
-  const R = (midX > midY ? midX : midY) + 300;
+interface Man {
+  speed: number;
+  scale: number;
+  tint: number;
+  rotation: number;
+  x: number;
+  y: number;
+}
 
-  const x = Math.cos(angle) * R + midX;
-  const y = Math.sin(angle) * R + midY;
+function getRanPosOutsideScreenSquare() {
+  const dis = 10;
+  const sideOfScreen = Math.round(randomNumber(0, 3));
+  let x = 0;
+  let y = 0;
+  switch (sideOfScreen) {
+    case 0:
+      y = -dis;
+      x = Math.round(randomNumber(0 - dis, window.innerWidth + dis));
+      break;
+    case 1:
+      y = Math.round(randomNumber(0 - dis, window.innerHeight + dis));
+      x = window.innerWidth + dis;
+      break;
+    case 2:
+      y = window.innerHeight + dis;
+      x = Math.round(randomNumber(0 - dis, window.innerWidth + dis));
+      break;
+    case 3:
+      y = Math.round(randomNumber(0 - dis, window.innerHeight + dis));
+      x = -dis;
+      break;
+
+    default:
+      break;
+  }
 
   return { x, y };
+}
+
+// function getRanPosOutOfScreenCircle() {
+//   const midX = window.innerWidth / 2;
+//   const midY = window.innerHeight / 2;
+//   const angle = Math.random() * Math.PI * 2;
+//   const R = (midX > midY ? midX : midY) + 300;
+
+//   const x = Math.cos(angle) * R + midX;
+//   const y = Math.sin(angle) * R + midY;
+
+//   return { x, y };
+// }
+
+function isPointOutsideScreen(x: number, y: number): boolean {
+  const midX = window.innerWidth / 2;
+  const midY = window.innerHeight / 2;
+  const R = (midX > midY ? midX : midY) + 300;
+  return Math.pow(x - midX, 2) + Math.pow(y - midY, 2) > Math.pow(R, 2);
 }
 
 export default RunningMan;

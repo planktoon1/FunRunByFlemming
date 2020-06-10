@@ -1,4 +1,10 @@
-import { AnimatedSprite, Container, useApp, useTick } from "@inlet/react-pixi";
+import {
+  AnimatedSprite,
+  Container,
+  useApp,
+  useTick,
+  Graphics,
+} from "@inlet/react-pixi";
 import cloneDeep from "lodash.clonedeep";
 import * as PIXI from "pixi.js";
 import React, { useEffect, useState } from "react";
@@ -11,7 +17,7 @@ const myRainbow = new Rainbow();
 const colorCount = 16;
 const COLORS: any[] = [];
 myRainbow.setNumberRange(1, colorCount);
-myRainbow.setSpectrum("#d4a74d", "#ff0000");
+myRainbow.setSpectrum("#66FF00", "#669900");
 for (var i = 1; i <= colorCount; i++) {
   COLORS.push(PIXI.utils.string2hex("#" + myRainbow.colourAt(i)));
 }
@@ -23,7 +29,14 @@ const RunningMan: React.FC<Params> = ({ frames }) => {
   const app = useApp();
 
   const [men, setMen] = useState<Man[]>([]);
+  const draw = React.useCallback((g: PIXI.Graphics) => {
+    g.clear();
+    g.lineStyle(2, PIXI.utils.string2hex("#333333"), 1);
+    g.moveTo(0, 5000);
+    g.lineTo(0, -5000);
 
+    g.endFill();
+  }, []);
   useEffect(() => {
     // On click event handler
     const onMouseClick = (event) => {
@@ -34,6 +47,7 @@ const RunningMan: React.FC<Params> = ({ frames }) => {
       const spawnPoint = getRanPosOutsideScreenSquare();
 
       const newMan = {
+        draw,
         speed: 3 + Math.random() * 3,
         scale: 0.5,
         tint: COLORS[Math.floor(Math.random() * COLORS.length)],
@@ -72,15 +86,18 @@ const RunningMan: React.FC<Params> = ({ frames }) => {
   }
 
   return (
-    <Container>
+    <Container sortableChildren={true}>
       {men.map((man, i) => {
         return (
-          <Container
-            key={i}
-            rotation={man.rotation + Math.PI * 0.5}
-            x={man.x}
-            y={man.y}
-          >
+          <>
+            <Graphics
+              draw={man.draw}
+              zIndex={0}
+              key={i}
+              rotation={man.rotation + Math.PI * 0.5}
+              x={man.x}
+              y={man.y}
+            />
             <AnimatedSprite
               animationSpeed={0.05 + 0.02 * man.speed}
               isPlaying={true}
@@ -88,8 +105,13 @@ const RunningMan: React.FC<Params> = ({ frames }) => {
               anchor={0.5}
               scale={man.scale}
               tint={man.tint}
+              zIndex={3}
+              key={i}
+              rotation={man.rotation + Math.PI * 0.5}
+              x={man.x}
+              y={man.y}
             />
-          </Container>
+          </>
         );
       })}
     </Container>
@@ -97,6 +119,7 @@ const RunningMan: React.FC<Params> = ({ frames }) => {
 };
 
 interface Man {
+  draw?: (graphics: PIXI.Graphics) => void;
   speed: number;
   scale: number;
   tint: number;

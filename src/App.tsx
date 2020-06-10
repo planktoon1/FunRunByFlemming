@@ -3,6 +3,8 @@ import React from "react";
 import styled from "styled-components";
 import PixiMain from "./components/PixiMain";
 
+import Frontpage from "./pages/frontpage/Frontpage";
+
 const PixiContainer = styled.div`
   position: absolute;
   left: 0px;
@@ -11,15 +13,15 @@ const PixiContainer = styled.div`
   z-index: -1;
 `;
 const AppContainer = styled.div`
+  display: flex;
   color: white;
+  margin: auto;
 `;
 
 function App() {
   return (
     <AppContainer>
-      <div>
-        <p>Fun Run By Flemming</p>
-      </div>
+      <Frontpage />
       <PixiContainer>
         <Stage>
           <PixiMain />

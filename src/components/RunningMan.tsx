@@ -93,7 +93,6 @@ const RunningMan: React.FC<Params> = ({ frames }) => {
             <Graphics
               draw={man.draw}
               zIndex={0}
-              key={i}
               rotation={man.rotation + Math.PI * 0.5}
               x={man.x}
               y={man.y}
@@ -106,7 +105,6 @@ const RunningMan: React.FC<Params> = ({ frames }) => {
               scale={man.scale}
               tint={man.tint}
               zIndex={3}
-              key={i}
               rotation={man.rotation + Math.PI * 0.5}
               x={man.x}
               y={man.y}

@@ -80,7 +80,7 @@ const useStyles = makeStyles((theme) => ({
 const Frontpage: React.FC = () => {
   const classes = useStyles();
   useEffect(() => {
-    TweenLite.to("." + classes.navigation, 2, { x: 500, y: 100 });
+    //TweenLite.to("." + classes.navigation, 2, { x: 500, y: 100 });
   }, []);
 
   return (
@@ -92,16 +92,16 @@ const Frontpage: React.FC = () => {
       <div className={classes.section}>
         <div className={classes.iconContainer}>
           <div className={classes.navigation}>
-            <img className={classes.icon} src={cameraSvg} />
-            <div className={classes.text}>Billeder</div>
-          </div>
-          <div className={classes.navigation}>
             <img className={classes.icon} src={registerSvg} />
             <div className={classes.text}>Tilmeld Dig</div>
           </div>
           <div className={classes.navigation}>
             <img className={classes.icon} src={shoesSvg} />
             <div className={classes.text}>Resultater</div>
+          </div>
+          <div className={classes.navigation}>
+            <img className={classes.icon} src={cameraSvg} />
+            <div className={classes.text}>Billeder</div>
           </div>
           <div className={classes.navigation}>
             <img className={classes.icon} src={aboutSvg} />

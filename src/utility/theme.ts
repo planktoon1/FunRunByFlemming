@@ -21,4 +21,7 @@ export const theme = createMuiTheme({
       contrastText: "#000000",
     },
   },
+  typography: {
+    fontFamily: ["'Special Elite', sans-serif"].join("'"),
+  },
 });

@@ -6,22 +6,21 @@ import shoesSvg from "../../assets/icons/shoes.svg";
 import aboutSvg from "../../assets/icons/user.svg";
 import frbfSvg from "../../assets/images/FUNRUNBYFLEMMING-original.svg";
 import road1 from "../../assets/images/road1.jpg";
-import { gsap, TweenLite } from "gsap";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const useStyles = makeStyles((theme) => ({
+  /** Component Container */
   container: {
-    scrollSnapType: "y proximity",
-    overflowY: "scroll",
-    maxHeight: "100vh",
+    // scrollSnapType: "y proximity",
+    // // overflowY: "scroll",
+    // maxHeight: "100vh",
   },
   section: {
     height: "100vh",
     scrollSnapAlign: "start",
   },
-  media: {
-    height: "20rem",
-    width: "20rem",
-  },
+
   landingImage: {
     scrollSnapAlign: "start",
     backgroundImage: `url(${road1})`,
@@ -47,40 +46,78 @@ const useStyles = makeStyles((theme) => ({
     objectFit: "contain",
     padding: "0 3rem",
   },
-  iconContainer: {
+  /** *** Introduction Section *** */
+  introductionSection: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-
     height: "100%",
   },
+  /** Navigation cards */
+  introductionSectionGrid: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr 1fr 1fr",
+    gridTemplateRows: "1fr 6rem 24rem 1fr 12rem 1fr",
+    margin: "0 1rem",
+    maxWidth: "45rem",
+    maxHeight: "100vh",
+    gridGap: "1.2rem",
+    gridTemplateAreas: [
+      '". . . ."',
+      '"title title title title"',
+      '"body body body body"',
+      '". . . ."',
+      '"register results pictures about"',
+      '". . . ."',
+    ].join(""),
+  },
+  navigationCard: {
+    gridArea: "card",
+    borderRadius: "1rem",
+    display: "flex",
+    flexDirection: "column",
+    backgroundColor: "rgb(0,0,0, 10%)",
+    padding: "0.5rem",
+  },
+  introTitle: {
+    gridArea: "title",
+    fontSize: "4rem",
+    textAlign: "center",
+    width: "100%",
+  },
+  introSubTitle: { gridArea: "subTitle" },
+  introBody: {
+    gridArea: "body",
+    fontSize: "2.8rem",
+    textAlign: "center",
+    width: "100%",
+  },
+  cardRegister: { gridArea: "register" },
+  cardResults: { gridArea: "results" },
+  cardPictures: { gridArea: "pictures" },
+  cardAbout: { gridArea: "about" },
   icon: {
     margin: "auto",
     width: "8rem",
   },
-  navigation: {
-    borderRadius: "1rem",
-    display: "flex",
-    flexDirection: "column",
-    height: "12rem",
-    width: "10rem",
-    backgroundColor: "rgb(0,0,0, 10%)",
-    padding: "0.1rem",
-    margin: "2.5rem",
-  },
-  text: {
-    fontFamily: "'Arial Black', Gadget, sans-serif",
+  navigationCardtext: {
+    fontWeight: 700,
     color: "black",
-    fontSize: "1.2rem",
+    fontSize: "1.3rem",
     textAlign: "center",
-    marginBottom: "1rem",
   },
+  /*  END Navigation cards */
 }));
 
 const Frontpage: React.FC = () => {
   const classes = useStyles();
   useEffect(() => {
-    //TweenLite.to("." + classes.navigation, 2, { x: 500, y: 100 });
+    const className = "." + classes.navigationCard;
+    const className2 = "." + classes.cardRegister;
+    gsap.to(".box", {
+      scrollTrigger: ".box", // start the animation when ".box" enters the viewport (once)
+      x: 500,
+    });
   }, []);
 
   return (
@@ -90,23 +127,41 @@ const Frontpage: React.FC = () => {
       </div>
 
       <div className={classes.section}>
-        <div className={classes.iconContainer}>
-          <div className={classes.navigation}>
-            <img className={classes.icon} src={registerSvg} />
-            <div className={classes.text}>Tilmeld Dig</div>
+        <div className={classes.introductionSection}>
+          <div className={classes.introductionSectionGrid}>
+            {/* Intro text */}
+            <h1 className={classes.introTitle}>Velkommen til holdet</h1>
+
+            <p className={classes.introBody}>
+              Her er det vores passion for at løbe er der bringer os sammen.{" "}
+              <br />
+              Deltag ved at tilmelde dig herunder
+            </p>
+
+            {/* Navigation Cards */}
+
+            <div
+              className={`${classes.navigationCard} ${classes.cardRegister}`}
+            >
+              <img className={classes.icon} src={registerSvg} />
+              <div className={classes.navigationCardtext}>Tilmeld Dig</div>
+            </div>
+            <div className={`${classes.navigationCard} ${classes.cardResults}`}>
+              <img className={classes.icon} src={shoesSvg} />
+              <div className={classes.navigationCardtext}>Resultater</div>
+            </div>
+            <div
+              className={`${classes.navigationCard} ${classes.cardPictures}`}
+            >
+              <img className={classes.icon} src={cameraSvg} />
+              <div className={classes.navigationCardtext}>Billeder</div>
+            </div>
+            <div className={`${classes.navigationCard} ${classes.cardAbout}`}>
+              <img className={classes.icon} src={aboutSvg} />
+              <div className={classes.navigationCardtext}>Om Mig</div>
+            </div>
           </div>
-          <div className={classes.navigation}>
-            <img className={classes.icon} src={shoesSvg} />
-            <div className={classes.text}>Resultater</div>
-          </div>
-          <div className={classes.navigation}>
-            <img className={classes.icon} src={cameraSvg} />
-            <div className={classes.text}>Billeder</div>
-          </div>
-          <div className={classes.navigation}>
-            <img className={classes.icon} src={aboutSvg} />
-            <div className={classes.text}>Om Mig</div>
-          </div>
+          <div className="box">HEJ MED DIG</div>
         </div>
       </div>
     </div>

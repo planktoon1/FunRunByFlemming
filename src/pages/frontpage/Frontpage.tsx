@@ -1,13 +1,23 @@
 import { makeStyles } from "@material-ui/core";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import React, { useEffect } from "react";
+import { Route, Switch, useRouteMatch } from "react-router-dom";
 import cameraSvg from "../../assets/icons/camera.svg";
 import registerSvg from "../../assets/icons/register.svg";
 import shoesSvg from "../../assets/icons/shoes.svg";
 import aboutSvg from "../../assets/icons/user.svg";
 import frbfSvg from "../../assets/images/FUNRUNBYFLEMMING-original.svg";
 import road1 from "../../assets/images/road1.jpg";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import RaceSelection from "../../components/sections/RaceSelection";
+import Results from "../../components/sections/Results";
+import { UnstyledLink } from "../../utility/link";
+gsap.defaults({
+  ease: "expo",
+});
+ScrollTrigger.defaults({
+  toggleActions: "play pause resume reverse",
+});
 
 const useStyles = makeStyles((theme) => ({
   /** Component Container */
@@ -72,6 +82,7 @@ const useStyles = makeStyles((theme) => ({
     ].join(""),
   },
   navigationCard: {
+    border: 0,
     gridArea: "card",
     borderRadius: "1rem",
     display: "flex",
@@ -111,19 +122,56 @@ const useStyles = makeStyles((theme) => ({
 
 const Frontpage: React.FC = () => {
   const classes = useStyles();
+
   useEffect(() => {
-    const className = "." + classes.navigationCard;
-    const className2 = "." + classes.cardRegister;
-    gsap.to(".box", {
-      scrollTrigger: ".box", // start the animation when ".box" enters the viewport (once)
-      x: 500,
-    });
+    // Animate navigation cards
+    gsap.fromTo(
+      "." + classes.navigationCard,
+      { y: 150, opacity: 0 },
+      {
+        scrollTrigger: {
+          trigger: "." + classes.navigationCard,
+        },
+        y: 0,
+        duration: 1.5,
+        opacity: 1,
+      }
+    );
+    gsap.fromTo(
+      "." + classes.introTitle,
+      { opacity: 0, x: 100 },
+      {
+        scrollTrigger: {
+          trigger: "." + classes.introTitle,
+        },
+        opacity: 1,
+        duration: 1.25,
+        x: 0,
+      }
+    );
+    gsap.fromTo(
+      "." + classes.introBody,
+      { opacity: 0, x: -100 },
+      {
+        scrollTrigger: {
+          trigger: "." + classes.introBody,
+        },
+        opacity: 1,
+        duration: 1.25,
+        x: 0,
+      }
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className={classes.container}>
       <div className={classes.landingImage}>
-        <img src={frbfSvg} className={classes.funRunSVG} />
+        <img
+          alt="Fun Run by Flemming"
+          src={frbfSvg}
+          className={classes.funRunSVG}
+        />
       </div>
 
       <div className={classes.section}>
@@ -139,31 +187,44 @@ const Frontpage: React.FC = () => {
             </p>
 
             {/* Navigation Cards */}
-
-            <div
+            <UnstyledLink
+              to={`/select`}
               className={`${classes.navigationCard} ${classes.cardRegister}`}
             >
-              <img className={classes.icon} src={registerSvg} />
+              <img
+                alt="Tilmeld dig"
+                className={classes.icon}
+                src={registerSvg}
+              />
               <div className={classes.navigationCardtext}>Tilmeld Dig</div>
-            </div>
-            <div className={`${classes.navigationCard} ${classes.cardResults}`}>
-              <img className={classes.icon} src={shoesSvg} />
+            </UnstyledLink>
+            <UnstyledLink
+              className={`${classes.navigationCard} ${classes.cardResults}`}
+              to={`/results`}
+            >
+              <img alt="Resultater" className={classes.icon} src={shoesSvg} />
               <div className={classes.navigationCardtext}>Resultater</div>
-            </div>
-            <div
+            </UnstyledLink>
+            <button
               className={`${classes.navigationCard} ${classes.cardPictures}`}
             >
-              <img className={classes.icon} src={cameraSvg} />
+              <img alt="Billeder" className={classes.icon} src={cameraSvg} />
               <div className={classes.navigationCardtext}>Billeder</div>
-            </div>
-            <div className={`${classes.navigationCard} ${classes.cardAbout}`}>
-              <img className={classes.icon} src={aboutSvg} />
+            </button>
+            <button
+              className={`${classes.navigationCard} ${classes.cardAbout}`}
+            >
+              <img alt="Om Mig" className={classes.icon} src={aboutSvg} />
               <div className={classes.navigationCardtext}>Om Mig</div>
-            </div>
+            </button>
           </div>
-          <div className="box">HEJ MED DIG</div>
         </div>
       </div>
+
+      <Switch>
+        <Route path={`/select`} component={RaceSelection} />
+        <Route path={`/results`} component={Results} />
+      </Switch>
     </div>
   );
 };

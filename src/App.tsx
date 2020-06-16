@@ -1,39 +1,18 @@
-import { Stage } from "@inlet/react-pixi";
-import {
-  AppBar,
-  IconButton,
-  makeStyles,
-  Toolbar,
-  Typography,
-} from "@material-ui/core";
-import MenuIcon from "@material-ui/icons/Menu";
 import React from "react";
-import styled from "styled-components";
-import PixiMain from "./components/PixiMain";
-import Frontpage from "./pages/frontpage/Frontpage";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import styled from "styled-components";
+import Frontpage from "./pages/frontpage/Frontpage";
 
-const PixiContainer = styled.div`
-  position: absolute;
-  left: 0px;
-  top: 0px;
-  background-color: black;
-  z-index: -1;
-`;
+// const PixiContainer = styled.div`
+//   position: absolute;
+//   left: 0px;
+//   top: 0px;
+//   background-color: black;
+//   z-index: -1;
+// `;
 const AppContainer = styled.div``;
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-  },
-  menuButton: {},
-  title: {
-    flexGrow: 1,
-  },
-}));
-
 function App() {
-  const classes = useStyles();
   return (
     <AppContainer>
       {/* <AppBar position="static" color="secondary">
@@ -53,7 +32,7 @@ function App() {
       </AppBar> */}
       <Router>
         <Switch>
-          <Route exact path="/" component={Frontpage} />
+          <Route path="/" component={Frontpage} />
         </Switch>
       </Router>
     </AppContainer>

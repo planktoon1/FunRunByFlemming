@@ -2,7 +2,7 @@ import { makeStyles } from "@material-ui/core";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import React, { useEffect } from "react";
-import { Route, Switch, useRouteMatch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import cameraSvg from "../../assets/icons/camera.svg";
 import registerSvg from "../../assets/icons/register.svg";
 import shoesSvg from "../../assets/icons/shoes.svg";
@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
   section: {
     height: "100vh",
     scrollSnapAlign: "start",
+    minHeight: "45rem",
   },
 
   landingImage: {
@@ -40,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: "100vh",
     [theme.breakpoints.down("sm")]: {
-      height: "20rem",
+      height: "40vh",
     },
     zIndex: -1,
     display: "flex",
@@ -50,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   funRunSVG: {
     height: "80vh",
     [theme.breakpoints.down("sm")]: {
-      maxHeight: "17rem",
+      maxHeight: "40vh",
     },
     overflow: "hidden",
     objectFit: "contain",
@@ -205,18 +206,20 @@ const Frontpage: React.FC = () => {
               <img alt="Resultater" className={classes.icon} src={shoesSvg} />
               <div className={classes.navigationCardtext}>Resultater</div>
             </UnstyledLink>
-            <button
+            <UnstyledLink
+              to={`/select`}
               className={`${classes.navigationCard} ${classes.cardPictures}`}
             >
               <img alt="Billeder" className={classes.icon} src={cameraSvg} />
               <div className={classes.navigationCardtext}>Billeder</div>
-            </button>
-            <button
+            </UnstyledLink>
+            <UnstyledLink
+              to={`/select`}
               className={`${classes.navigationCard} ${classes.cardAbout}`}
             >
               <img alt="Om Mig" className={classes.icon} src={aboutSvg} />
               <div className={classes.navigationCardtext}>Om Mig</div>
-            </button>
+            </UnstyledLink>
           </div>
         </div>
       </div>

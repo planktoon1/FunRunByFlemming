@@ -25,3 +25,15 @@ export const theme = createMuiTheme({
     fontFamily: ["'Special Elite', sans-serif"].join("'"),
   },
 });
+
+theme.overrides = {
+  MuiCssBaseline: {
+    "@global": {
+      html: {
+        [theme.breakpoints.down("sm")]: {
+          fontSize: "12px",
+        },
+      },
+    },
+  },
+};

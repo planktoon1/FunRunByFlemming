@@ -1,5 +1,6 @@
 import { makeStyles } from "@material-ui/core";
 import React, { useEffect } from "react";
+import Flickity from "flickity";
 
 const useStyles = makeStyles((theme) => ({
   /** Component Container */
@@ -31,17 +32,20 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     backgroundColor: "rgb(0,0,0, 10%)",
     padding: "0.5rem",
-    width: "30rem",
+    width: "40%",
+    height: "30rem",
+    margin: "1rem",
+    counterIncrement: "carousel-cell",
+    boxSizing: "border-box",
+  },
+  "is-selected": {
+    backgroundColor: "blue",
   },
   gallery: {
     background: "#EEE",
-  },
-  galleryCell: {
     width: "100%",
-    height: "200px",
-    marginRight: "10px",
-    background: "#8C8",
-    counterIncrement: "gallery-cell",
+    height: "30rem",
+    boxSizing: "border-box",
   },
   /*  END Navigation cards */
 }));
@@ -49,18 +53,30 @@ const useStyles = makeStyles((theme) => ({
 const RaceSelection: React.FC = () => {
   const classes = useStyles();
   useEffect(() => {
+    // element argument can be a selector string
+    //   for an individual element
+    var flkty = new Flickity(`.${classes.gallery}`, {
+      cellAlign: "left",
+      contain: true,
+      prevNextButtons: true,
+      pageDots: false,
+      groupCells: true,
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <div className={classes.container}>
       <div
-        className={`${classes.gallery} js-flickity`}
+        className={`${classes.gallery}`}
         data-flickity-options='{ "cellAlign": "left", "contain": true }'
       >
-        <div className={classes.galleryCell}>...</div>
-        <div className={classes.galleryCell}>...</div>
-        <div className={classes.galleryCell}>...</div>
+        <div className={classes.raceCard}>..HEJ.</div>
+        <div className={classes.raceCard}>...</div>
+        <div className={classes.raceCard}>...</div>
+        <div className={classes.raceCard}>DOT</div>
+        <div className={classes.raceCard}>TEST</div>
+        <div className={classes.raceCard}>...</div>
       </div>
     </div>
   );

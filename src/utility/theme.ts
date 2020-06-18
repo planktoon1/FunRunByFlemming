@@ -34,6 +34,11 @@ theme.overrides = {
           fontSize: "12px",
         },
       },
+      "#root": {
+        maxHeight: "100vh",
+        overflowY: "auto",
+        scrollSnapType: "y proximity",
+      },
     },
   },
 };

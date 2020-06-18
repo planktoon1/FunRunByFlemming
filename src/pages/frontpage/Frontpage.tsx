@@ -17,6 +17,7 @@ gsap.defaults({
 });
 ScrollTrigger.defaults({
   toggleActions: "play pause resume reverse",
+  scroller: "#root",
 });
 
 const useStyles = makeStyles((theme) => ({

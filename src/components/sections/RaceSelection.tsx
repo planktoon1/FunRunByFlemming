@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme) => ({
   gallery: {
     width: "35rem",
     height: "40rem",
-    marginBottom: "4rem",
     "&:focus": {
       outline: "1px dashed #888888",
     },

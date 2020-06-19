@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     height: "100vh",
     scrollSnapAlign: "start",
     minHeight: "55rem",
-    backgroundColor: "#7d925c",
+    backgroundColor: "white",
   },
 
   landingImage: {
@@ -84,21 +84,23 @@ const useStyles = makeStyles((theme) => ({
     ].join(""),
   },
   navigationCard: {
-    border: 0,
+    border: `0.2rem dashed ${theme.palette.secondary.light}`,
     gridArea: "card",
     borderRadius: "1rem",
     display: "flex",
     flexDirection: "column",
-    backgroundColor: "rgba(255,255,255, 20%)",
+    // backgroundColor: "rgba(0,0,0, 20%)",
     padding: "0.5rem",
   },
   introTitle: {
+    color: theme.palette.secondary.main,
     fontSize: "4rem",
     textAlign: "center",
     width: "100%",
     marginBottom: "0",
   },
   introBody: {
+    color: theme.palette.secondary.light,
     marginTop: "0.5rem",
     fontSize: "2.6rem",
     textAlign: "center",
@@ -112,10 +114,12 @@ const useStyles = makeStyles((theme) => ({
   icon: {
     margin: "auto",
     width: "8rem",
+    filter:
+      "invert(32%) sepia(45%) saturate(452%) hue-rotate(42deg) brightness(98%) contrast(89%)",
   },
   navigationCardtext: {
     fontWeight: 700,
-    color: "black",
+    color: theme.palette.secondary.light,
     fontSize: "1.3rem",
     textAlign: "center",
   },

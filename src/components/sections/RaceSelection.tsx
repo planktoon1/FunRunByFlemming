@@ -13,6 +13,7 @@ import { Route, Switch, useRouteMatch, useParams } from "react-router-dom";
 import Pictures from "./Pictures";
 import SignUp from "./SignUp";
 import Results from "./Results";
+import { theme } from "../../utility/theme";
 
 const useStyles = makeStyles((theme) => ({
   container: {},
@@ -133,6 +134,7 @@ const useStyles = makeStyles((theme) => ({
     },
     "& .year": {
       fontSize: "3rem",
+      color: theme.palette.secondary.main,
     },
     "& button": {
       fontSize: "3rem",
@@ -193,6 +195,7 @@ const RaceSelection: React.FC = () => {
   const years = Object.keys(mockRaceObject);
   const [races, setRaces] = useState<any[]>(mockRaceObject[years[0]]);
   const [selectedYearIndex, setSelectedYearIndex] = useState(0);
+  const [selectedRace, setSelectedRace] = useState(0);
   const { url, path } = useRouteMatch();
   let { dest } = useParams();
 
@@ -216,7 +219,10 @@ const RaceSelection: React.FC = () => {
       }
 
       flkty.current?.selectCell(cellIndex);
+      setSelectedRace(flkty.current!.selectedIndex);
     });
+    flkty.current.selectCell(1);
+    setSelectedRace(flkty.current.selectedIndex);
   }, [classes.gallery, races]);
 
   const changeYearBy = (n: number) => {
@@ -242,7 +248,10 @@ const RaceSelection: React.FC = () => {
         <DirectionsRunOutlinedIcon /> {race.distance}
       </p>
       <p className="description">{race.description}</p>
-      <UnstyledLink to={`/race/${dest}/:${i}/#action`} className="selectRace">
+      <UnstyledLink
+        to={`/race/${dest}/:${selectedRace}/#action`}
+        className="selectRace"
+      >
         <KeyboardArrowDownOutlinedIcon
           style={{
             width: "3rem",
@@ -279,7 +288,7 @@ const RaceSelection: React.FC = () => {
                   width: "2rem",
                   height: "2rem",
                   fill: years[selectedYearIndex - 1]
-                    ? "black"
+                    ? theme.palette.secondary.light
                     : "rgb(0,0,0, 20%)",
                 }}
               />
@@ -293,7 +302,7 @@ const RaceSelection: React.FC = () => {
                   width: "2rem",
                   height: "2rem",
                   fill: years[selectedYearIndex + 1]
-                    ? "black"
+                    ? theme.palette.secondary.light
                     : "rgb(0,0,0, 20%)",
                 }}
               />

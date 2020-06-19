@@ -8,7 +8,8 @@ const useStyles = makeStyles((theme) => ({
     // // overflowY: "scroll",
     // maxHeight: "100vh",
     height: "100vh",
-    backgroundColor: "blue",
+    backgroundColor: theme.palette.secondary.light,
+    scrollSnapAlign: "start",
   },
 
   /*  END Navigation cards */

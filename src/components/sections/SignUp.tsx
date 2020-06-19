@@ -21,7 +21,7 @@ const SignUp: React.FC = () => {
   }, []);
 
   return (
-    <div id="s" className={classes.container}>
+    <div id="action" className={classes.container}>
       SignUp
     </div>
   );

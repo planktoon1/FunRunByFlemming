@@ -21,7 +21,7 @@ const Results: React.FC = () => {
   }, []);
 
   return (
-    <div id="r" className={classes.container}>
+    <div id="action" className={classes.container}>
       Results
     </div>
   );

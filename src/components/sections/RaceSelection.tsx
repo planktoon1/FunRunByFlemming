@@ -9,7 +9,7 @@ import KeyboardArrowDownOutlinedIcon from "@material-ui/icons/KeyboardArrowDownO
 import ArrowBackIosOutlinedIcon from "@material-ui/icons/ArrowBackIosOutlined";
 import ArrowForwardIosOutlinedIcon from "@material-ui/icons/ArrowForwardIosOutlined";
 import { UnstyledLink } from "../../utility/link";
-import { Route, Switch, useRouteMatch } from "react-router-dom";
+import { Route, Switch, useRouteMatch, useParams } from "react-router-dom";
 import Pictures from "./Pictures";
 import SignUp from "./SignUp";
 import Results from "./Results";
@@ -194,6 +194,7 @@ const RaceSelection: React.FC = () => {
   const [races, setRaces] = useState<any[]>(mockRaceObject[years[0]]);
   const [selectedYearIndex, setSelectedYearIndex] = useState(0);
   const { url, path } = useRouteMatch();
+  let { dest } = useParams();
 
   const flkty = useRef<Flickity>();
   useEffect(() => {
@@ -241,7 +242,7 @@ const RaceSelection: React.FC = () => {
         <DirectionsRunOutlinedIcon /> {race.distance}
       </p>
       <p className="description">{race.description}</p>
-      <UnstyledLink to={`/results`} className="selectRace">
+      <UnstyledLink to={`/race/${dest}/:${i}/#action`} className="selectRace">
         <KeyboardArrowDownOutlinedIcon
           style={{
             width: "3rem",
@@ -252,6 +253,19 @@ const RaceSelection: React.FC = () => {
       </UnstyledLink>
     </div>
   ));
+
+  const getActionComponent = () => {
+    switch (dest) {
+      case "signup":
+        return SignUp;
+      case "results":
+        return Results;
+      case "pictures":
+        return Pictures;
+      default:
+        return;
+    }
+  };
 
   return (
     <div className={classes.container}>
@@ -296,10 +310,9 @@ const RaceSelection: React.FC = () => {
       </div>
 
       <Switch>
-        <Route path={`/pictures`} component={Pictures} />
-        <Route path={`/results`} component={Results} />
-        <Route path={`/signup`} component={SignUp} />
+        <Route path={`${url}/:raceid`} component={getActionComponent()} />
       </Switch>
+      {/* <SignUp /> */}
     </div>
   );
 };

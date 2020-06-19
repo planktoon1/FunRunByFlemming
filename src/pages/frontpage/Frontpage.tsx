@@ -89,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "1rem",
     display: "flex",
     flexDirection: "column",
-    backgroundColor: "rgb(0,0,0, 10%)",
+    backgroundColor: "rgba(255,255,255, 20%)",
     padding: "0.5rem",
   },
   introTitle: {
@@ -192,7 +192,7 @@ const Frontpage: React.FC = () => {
 
             {/* Navigation Cards */}
             <UnstyledLink
-              to={`/select/signup/#raceselection`}
+              to={`/race/signup/#raceselection`}
               className={`${classes.navigationCard} ${classes.cardRegister}`}
               // onClick={() =>
               //   document?.getElementById("raceselection")?.scrollIntoView()
@@ -207,13 +207,13 @@ const Frontpage: React.FC = () => {
             </UnstyledLink>
             <UnstyledLink
               className={`${classes.navigationCard} ${classes.cardResults}`}
-              to={`/select/results/#raceselection`}
+              to={`/race/results/#raceselection`}
             >
               <img alt="Resultater" className={classes.icon} src={shoesSvg} />
               <div className={classes.navigationCardtext}>Resultater</div>
             </UnstyledLink>
             <UnstyledLink
-              to={`/select/pictures/#raceselection`}
+              to={`/race/pictures/#raceselection`}
               className={`${classes.navigationCard} ${classes.cardPictures}`}
             >
               <img alt="Billeder" className={classes.icon} src={cameraSvg} />
@@ -231,7 +231,7 @@ const Frontpage: React.FC = () => {
       </div>
 
       <Switch>
-        <Route path={`/select/:dest`} component={RaceSelection} />
+        <Route path={`/race/:dest`} component={RaceSelection} />
         <Route path={`/about`} component={About} />
       </Switch>
     </div>

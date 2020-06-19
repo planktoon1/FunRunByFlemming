@@ -21,7 +21,7 @@ const Pictures: React.FC = () => {
   }, []);
 
   return (
-    <div id="p" className={classes.container}>
+    <div id="action" className={classes.container}>
       Pictures
     </div>
   );

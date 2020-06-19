@@ -38,6 +38,7 @@ theme.overrides = {
         maxHeight: "100vh",
         overflowY: "auto",
         scrollSnapType: "y proximity",
+        scrollBehavior: "smooth",
       },
     },
   },

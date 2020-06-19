@@ -8,23 +8,23 @@ const useStyles = makeStyles((theme) => ({
     // // overflowY: "scroll",
     // maxHeight: "100vh",
     height: "100vh",
-    backgroundColor: "blue",
+    backgroundColor: "white",
   },
 
   /*  END Navigation cards */
 }));
 
-const Results: React.FC = () => {
+const About: React.FC = () => {
   const classes = useStyles();
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <div id="r" className={classes.container}>
-      Results
+    <div id="about" className={classes.container}>
+      About
     </div>
   );
 };
 
-export default Results;
+export default About;

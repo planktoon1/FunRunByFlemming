@@ -9,8 +9,8 @@ import shoesSvg from "../../assets/icons/shoes.svg";
 import aboutSvg from "../../assets/icons/user.svg";
 import frbfSvg from "../../assets/images/FUNRUNBYFLEMMING-original.svg";
 import road1 from "../../assets/images/road1.jpg";
+import About from "../../components/sections/About";
 import RaceSelection from "../../components/sections/RaceSelection";
-import Results from "../../components/sections/Results";
 import { UnstyledLink } from "../../utility/link";
 gsap.defaults({
   ease: "expo",
@@ -30,7 +30,8 @@ const useStyles = makeStyles((theme) => ({
   section: {
     height: "100vh",
     scrollSnapAlign: "start",
-    minHeight: "45rem",
+    minHeight: "55rem",
+    backgroundColor: "#7d925c",
   },
 
   landingImage: {
@@ -63,21 +64,20 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    height: "100%",
+    height: "100vh",
   },
   /** Navigation cards */
   introductionSectionGrid: {
     display: "grid",
     gridTemplateColumns: "1fr 1fr 1fr 1fr",
-    gridTemplateRows: "1fr 6rem 24rem 1fr 12rem 1fr",
+    gridTemplateRows: "1fr auto auto 1fr auto 1fr",
     margin: "0 1rem",
     maxWidth: "45rem",
-    maxHeight: "100vh",
+    height: "100%",
     gridGap: "1.2rem",
     gridTemplateAreas: [
       '". . . ."',
-      '"title title title title"',
-      '"body body body body"',
+      '"introText introText introText introText"',
       '". . . ."',
       '"register results pictures about"',
       '". . . ."',
@@ -93,18 +93,18 @@ const useStyles = makeStyles((theme) => ({
     padding: "0.5rem",
   },
   introTitle: {
-    gridArea: "title",
     fontSize: "4rem",
     textAlign: "center",
     width: "100%",
+    marginBottom: "0",
   },
-  introSubTitle: { gridArea: "subTitle" },
   introBody: {
-    gridArea: "body",
-    fontSize: "2.8rem",
+    marginTop: "0.5rem",
+    fontSize: "2.6rem",
     textAlign: "center",
     width: "100%",
   },
+  introText: { gridArea: "introText" },
   cardRegister: { gridArea: "register" },
   cardResults: { gridArea: "results" },
   cardPictures: { gridArea: "pictures" },
@@ -180,18 +180,23 @@ const Frontpage: React.FC = () => {
         <div className={classes.introductionSection}>
           <div className={classes.introductionSectionGrid}>
             {/* Intro text */}
-            <h1 className={classes.introTitle}>Velkommen til holdet</h1>
+            <div className={classes.introText}>
+              <h1 className={classes.introTitle}>Velkommen til holdet</h1>
 
-            <p className={classes.introBody}>
-              Her er det vores passion for at løbe er der bringer os sammen.{" "}
-              <br />
-              Deltag ved at tilmelde dig herunder
-            </p>
+              <p className={classes.introBody}>
+                Her er det vores passion for at løbe er der bringer os sammen.{" "}
+                <br />
+                Deltag ved at tilmelde dig herunder
+              </p>
+            </div>
 
             {/* Navigation Cards */}
             <UnstyledLink
-              to={`/select`}
+              to={`/select/signup/#raceselection`}
               className={`${classes.navigationCard} ${classes.cardRegister}`}
+              // onClick={() =>
+              //   document?.getElementById("raceselection")?.scrollIntoView()
+              // }
             >
               <img
                 alt="Tilmeld dig"
@@ -202,20 +207,20 @@ const Frontpage: React.FC = () => {
             </UnstyledLink>
             <UnstyledLink
               className={`${classes.navigationCard} ${classes.cardResults}`}
-              to={`/results`}
+              to={`/select/results/#raceselection`}
             >
               <img alt="Resultater" className={classes.icon} src={shoesSvg} />
               <div className={classes.navigationCardtext}>Resultater</div>
             </UnstyledLink>
             <UnstyledLink
-              to={`/select`}
+              to={`/select/pictures/#raceselection`}
               className={`${classes.navigationCard} ${classes.cardPictures}`}
             >
               <img alt="Billeder" className={classes.icon} src={cameraSvg} />
               <div className={classes.navigationCardtext}>Billeder</div>
             </UnstyledLink>
             <UnstyledLink
-              to={`/select`}
+              to={`/about/#about`}
               className={`${classes.navigationCard} ${classes.cardAbout}`}
             >
               <img alt="Om Mig" className={classes.icon} src={aboutSvg} />
@@ -226,8 +231,8 @@ const Frontpage: React.FC = () => {
       </div>
 
       <Switch>
-        <Route path={`/select`} component={RaceSelection} />
-        <Route path={`/results`} component={Results} />
+        <Route path={`/select/:dest`} component={RaceSelection} />
+        <Route path={`/about`} component={About} />
       </Switch>
     </div>
   );

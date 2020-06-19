@@ -9,21 +9,40 @@ import KeyboardArrowDownOutlinedIcon from "@material-ui/icons/KeyboardArrowDownO
 import ArrowBackIosOutlinedIcon from "@material-ui/icons/ArrowBackIosOutlined";
 import ArrowForwardIosOutlinedIcon from "@material-ui/icons/ArrowForwardIosOutlined";
 import { UnstyledLink } from "../../utility/link";
+import { Route, Switch, useRouteMatch } from "react-router-dom";
+import Pictures from "./Pictures";
+import SignUp from "./SignUp";
+import Results from "./Results";
 
 const useStyles = makeStyles((theme) => ({
-  /** Component Container */
-  container: {
+  container: {},
+  /** Component section */
+  section: {
     overflowX: "hidden",
     height: "100vh",
     minHeight: "45rem",
     scrollSnapAlign: "start",
-    backgroundColor: "#fcf8e8",
+    backgroundColor: "white",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
   },
+  raceSelectionGrid: {
+    display: "grid",
+    gridTemplateColumns: "auto auto auto",
+    gridTemplateRows: "auto auto 1fr",
+    margin: "0 1rem",
+    maxWidth: "45rem",
+    maxHeight: "100vh",
+    height: "100vh",
+    gridGap: "1.2rem",
+    gridTemplateAreas: ['". yearSelector ."', '". gallery ."', '". . . "'].join(
+      ""
+    ),
+  },
   gallery: {
+    gridArea: "gallery",
     width: "35rem",
     height: "40rem",
     "&:focus": {
@@ -36,7 +55,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     borderRadius: "1rem",
     backgroundColor: "rgb(0,0,0, 10%)",
-
     textAlign: "center",
     width: "35rem",
     height: "40rem",
@@ -44,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
     transition: "background-color 0.5s",
     zIndex: 1,
     "&.is-selected": {
-      backgroundColor: "grey",
+      backgroundColor: "#7d925c",
       zIndex: 10,
     },
     "& h2": {
@@ -85,8 +103,27 @@ const useStyles = makeStyles((theme) => ({
       },
     },
   },
+  nextRace: {
+    gridArea: "nextRace",
+    height: "40rem",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "10rem",
+    zIndex: 5,
+  },
+  previousRace: {
+    gridArea: "previousRace",
+    height: "40rem",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "10rem",
+    zIndex: 5,
+  },
   yearSelector: {
     display: "flex",
+    gridArea: "yearSelector",
     alignItems: "center",
     justifyContent: "center",
     margin: "2rem",
@@ -154,16 +191,30 @@ const mockRaceObject = {
 const RaceSelection: React.FC = () => {
   const classes = useStyles();
   const years = Object.keys(mockRaceObject);
-  const [races, setRaces] = useState(mockRaceObject[years[0]]);
+  const [races, setRaces] = useState<any[]>(mockRaceObject[years[0]]);
   const [selectedYearIndex, setSelectedYearIndex] = useState(0);
+  const { url, path } = useRouteMatch();
 
   const flkty = useRef<Flickity>();
   useEffect(() => {
-    flkty.current = new Flickity(`.${classes.gallery}`, {
+    const galery = document.querySelector(`.${classes.gallery}`);
+    flkty.current = new Flickity(galery!, {
       cellAlign: "left",
       contain: true,
       prevNextButtons: false,
       pageDots: false,
+    });
+    flkty.current.on("staticClick", function (
+      event,
+      pointer,
+      cellElement,
+      cellIndex
+    ) {
+      if (cellIndex === undefined) {
+        return;
+      }
+
+      flkty.current?.selectCell(cellIndex);
     });
   }, [classes.gallery, races]);
 
@@ -177,8 +228,8 @@ const RaceSelection: React.FC = () => {
     }
   };
 
-  const raceElements = races.map((race) => (
-    <div key={race.date} className={classes.raceCard}>
+  const raceElements = races.map((race, i) => (
+    <div key={i} className={classes.raceCard}>
       <h2>{race.title}</h2>
       <p className="detail">
         <PlaceOutlinedIcon /> {race.place}
@@ -204,36 +255,51 @@ const RaceSelection: React.FC = () => {
 
   return (
     <div className={classes.container}>
-      {/* Year selector */}
-      <div className={classes.yearSelector}>
-        <button onClick={() => changeYearBy(-1)}>
-          <ArrowBackIosOutlinedIcon
-            style={{
-              width: "2rem",
-              height: "2rem",
-            }}
-          />
-        </button>
+      <div className={classes.section} id="raceselection">
+        <div className={classes.raceSelectionGrid}>
+          {/* Year selector */}
+          <div className={classes.yearSelector}>
+            <button onClick={() => changeYearBy(-1)}>
+              <ArrowBackIosOutlinedIcon
+                style={{
+                  width: "2rem",
+                  height: "2rem",
+                  fill: years[selectedYearIndex - 1]
+                    ? "black"
+                    : "rgb(0,0,0, 20%)",
+                }}
+              />
+            </button>
 
-        <h2 className="year">{years[selectedYearIndex]}</h2>
+            <h2 className="year">{years[selectedYearIndex]}</h2>
 
-        <button onClick={() => changeYearBy(1)}>
-          <ArrowForwardIosOutlinedIcon
-            style={{
-              width: "2rem",
-              height: "2rem",
-            }}
-          />
-        </button>
+            <button onClick={() => changeYearBy(1)}>
+              <ArrowForwardIosOutlinedIcon
+                style={{
+                  width: "2rem",
+                  height: "2rem",
+                  fill: years[selectedYearIndex + 1]
+                    ? "black"
+                    : "rgb(0,0,0, 20%)",
+                }}
+              />
+            </button>
+          </div>
+
+          <div
+            className={`${classes.gallery}`}
+            data-flickity-options='{ "cellAlign": "left", "contain": true }'
+          >
+            {raceElements}
+          </div>
+        </div>
       </div>
 
-      {/* Race selection */}
-      <div
-        className={`${classes.gallery}`}
-        data-flickity-options='{ "cellAlign": "left", "contain": true }'
-      >
-        {raceElements}
-      </div>
+      <Switch>
+        <Route path={`/pictures`} component={Pictures} />
+        <Route path={`/results`} component={Results} />
+        <Route path={`/signup`} component={SignUp} />
+      </Switch>
     </div>
   );
 };

@@ -68,7 +68,7 @@ interface GlobalContextI {
   setSelectedRace: (race: Race) => void;
   selectedYear: number;
   setSelectedYear: (year: number) => void;
-  allRaces: InputRace[];
+  allRaces: Race[];
   racesByYear: RacesByYear;
 }
 
@@ -82,8 +82,14 @@ export const GlobalContext = createContext<GlobalContextI>({
 });
 
 const GlobalContextProvider: React.FC<Props> = (props) => {
-  const [selectedRace, setSelectedRace] = useState(allRaces[0]);
+  const [selectedRace, setSelectedRace2] = useState(allRaces[0]);
   const [selectedYear, setSelectedYear] = useState(2020);
+
+  const setSelectedRace = (race) => {
+    console.log("SELECTED A RACE");
+
+    setSelectedRace2(race);
+  };
 
   return (
     <GlobalContext.Provider

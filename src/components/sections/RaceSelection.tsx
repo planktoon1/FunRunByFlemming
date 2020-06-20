@@ -8,7 +8,13 @@ import PlaceOutlinedIcon from "@material-ui/icons/PlaceOutlined";
 import Flickity from "flickity";
 import cloneDeep from "lodash.clonedeep";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import { Route, Switch, useParams, useRouteMatch } from "react-router-dom";
+import {
+  Route,
+  Switch,
+  useParams,
+  useRouteMatch,
+  useHistory,
+} from "react-router-dom";
 import { GlobalContext } from "../../contexts/globalContext";
 import { UnstyledLink } from "../../utility/link";
 import { theme } from "../../utility/theme";
@@ -158,8 +164,11 @@ const RaceSelection: React.FC = () => {
   const years = Object.keys(ctx.racesByYear);
   const [races, setRaces] = useState<any[]>(ctx.racesByYear[years[0]]);
   const [selectedYearIndex, setSelectedYearIndex] = useState(0);
-  const [selectedRace, setSelectedRace] = useState(0);
-  const { url } = useRouteMatch();
+  const [selectedRace, setSelectedRace] = useState(
+    encodeURI(ctx.selectedRace.title)
+  );
+  const history = useHistory();
+  const { url, path } = useRouteMatch();
   let { dest } = useParams();
 
   const flkty = useRef<Flickity>();
@@ -183,12 +192,17 @@ const RaceSelection: React.FC = () => {
       flkty.current?.selectCell(cellIndex);
     });
     flkty.current.on("settle", function (cellIndex) {
-      ctx.setSelectedRace(races[Number(cellIndex)]);
+      const raceToBe = races[Number(cellIndex)];
+      ctx.setSelectedRace(raceToBe);
+      setSelectedRace(encodeURI(raceToBe.title));
+      //history.push(`/race/${dest}/:${encodeURI(raceToBe.title)}`);
     });
     // If possible select second index to make the page look better ;)
     flkty.current.selectCell(1);
-    setSelectedRace(flkty.current.selectedIndex);
-    ctx.setSelectedRace(races[flkty.current.selectedIndex]);
+    // ctx.setSelectedRace(races[flkty.current.selectedIndex]);
+    const raceTitleUri = encodeURI(races[flkty.current.selectedIndex].title);
+    setSelectedRace(raceTitleUri);
+    //history.push(`/race/${dest}/:${raceTitleUri}`);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [classes.gallery, races]);
 
@@ -260,7 +274,6 @@ const RaceSelection: React.FC = () => {
                 }}
               />
             </button>
-
             <h2 className="year">{years[selectedYearIndex]}</h2>
 
             <button onClick={() => changeYearBy(1)}>

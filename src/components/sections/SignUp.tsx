@@ -5,7 +5,8 @@ import {
   MenuItem,
   Button,
 } from "@material-ui/core";
-import React, { useEffect } from "react";
+import React, { useEffect, useContext, useState } from "react";
+import { GlobalContext } from "../../contexts/globalContext";
 
 const useStyles = makeStyles((theme) => ({
   /** Component Container */
@@ -42,6 +43,7 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.secondary.main,
       fontSize: "3rem",
       margin: "0",
+      width: "30rem",
     },
     "& h3": {
       color: theme.palette.secondary.light,
@@ -77,9 +79,16 @@ const useStyles = makeStyles((theme) => ({
 
 const SignUp: React.FC = () => {
   const classes = useStyles();
+  const ctx = useContext(GlobalContext);
+  const [distance, setDistance] = useState<string>("");
   useEffect(() => {
+    setDistance(ctx.selectedRace.distances[0]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [ctx.selectedRace]);
+
+  const handleDistanceChange = (e) => {
+    setDistance(e.target.value);
+  };
 
   return (
     <div id="action" className={classes.container}>
@@ -87,7 +96,7 @@ const SignUp: React.FC = () => {
         <div className={classes.signUpGrid}>
           <div className={classes.text}>
             <h3>Tilmeld dig:</h3>
-            <h2>{"Title of run goes here"}</h2>
+            <h2>{ctx.selectedRace.title}</h2>
           </div>
           <form className={classes.form} noValidate autoComplete="off">
             <TextField
@@ -113,16 +122,21 @@ const SignUp: React.FC = () => {
               className={classes.input}
               fullWidth
             />
+
             <Select
               labelId="Distance"
               fullWidth
               color="secondary"
               variant="outlined"
               className={classes.input}
-              value={21}
+              value={distance}
+              onChange={handleDistanceChange}
             >
-              <MenuItem value={21}>21.1 km</MenuItem>
-              <MenuItem value={10}>10 km</MenuItem>
+              {ctx.selectedRace.distances.map((dis) => (
+                <MenuItem key={dis} value={dis}>
+                  {dis}
+                </MenuItem>
+              ))}
             </Select>
             <Button
               type="submit"

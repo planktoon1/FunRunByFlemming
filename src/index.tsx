@@ -22,11 +22,11 @@ WebFont.load({
   },
 });
 ReactDOM.render(
-  <React.StrictMode>
+  <React.Fragment>
     <MuiThemeProvider theme={theme}>
       <CssBaseline />
       <App />
     </MuiThemeProvider>
-  </React.StrictMode>,
+  </React.Fragment>,
   document.getElementById("root")
 );

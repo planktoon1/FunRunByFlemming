@@ -1,19 +1,20 @@
 import { makeStyles } from "@material-ui/core";
-import Flickity from "flickity";
-import React, { useEffect, useRef, useState } from "react";
-import cloneDeep from "lodash.clonedeep";
-import PlaceOutlinedIcon from "@material-ui/icons/PlaceOutlined";
-import EventOutlinedIcon from "@material-ui/icons/EventOutlined";
-import DirectionsRunOutlinedIcon from "@material-ui/icons/DirectionsRunOutlined";
-import KeyboardArrowDownOutlinedIcon from "@material-ui/icons/KeyboardArrowDownOutlined";
 import ArrowBackIosOutlinedIcon from "@material-ui/icons/ArrowBackIosOutlined";
 import ArrowForwardIosOutlinedIcon from "@material-ui/icons/ArrowForwardIosOutlined";
+import DirectionsRunOutlinedIcon from "@material-ui/icons/DirectionsRunOutlined";
+import EventOutlinedIcon from "@material-ui/icons/EventOutlined";
+import KeyboardArrowDownOutlinedIcon from "@material-ui/icons/KeyboardArrowDownOutlined";
+import PlaceOutlinedIcon from "@material-ui/icons/PlaceOutlined";
+import Flickity from "flickity";
+import cloneDeep from "lodash.clonedeep";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { Route, Switch, useParams, useRouteMatch } from "react-router-dom";
+import { GlobalContext } from "../../contexts/globalContext";
 import { UnstyledLink } from "../../utility/link";
-import { Route, Switch, useRouteMatch, useParams } from "react-router-dom";
-import Pictures from "./Pictures";
-import SignUp from "./SignUp";
-import Results from "./Results";
 import { theme } from "../../utility/theme";
+import Pictures from "./Pictures";
+import Results from "./Results";
+import SignUp from "./SignUp";
 
 const useStyles = makeStyles((theme) => ({
   container: {},
@@ -151,52 +152,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const mockRaceObject = {
-  "2020": [
-    {
-      title: "Big Day Race",
-      date: "2020-06-17T16:25:42.168Z",
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex odio sed incidunt expedita explicabo a provident repellat illo nemo, ea totam natus eius nulla cumque, obcaecati consequatur consectetur? Placeat, nemo?",
-      place: "Platanale 46, Horsens",
-      distance: "21.1 km",
-    },
-    {
-      title: "Super Fun Run",
-      date: "2020-10-17T16:25:42.168Z",
-      description:
-        "Lorem ipsum dolor sit amet consectetur a provident repellat illo nemo, ea totam natus eius nulla cumque, obcaecati consequatur consectetur? Placeat, nemo?",
-      place: "Platanale 46, Horsens",
-      distance: "21.1 km",
-    },
-    {
-      title: "Last Day of the Year",
-      date: "2020-12-31T16:25:42.168Z",
-      description:
-        "Ex odio sed incidunt expedita explicabo a provident repellat illo nemo, ea totam natus eius nulla cumque, obcaecati consequatur consectetur? Placeat, nemo?  incidunt expedita explicabo a provident repellat illo nemo, ea totam natus eius nulla cumque, obcaecati consequatur consectetur?",
-      place: "Platanale 46, Horsens",
-      distance: "21.1 km",
-    },
-  ],
-  "2021": [
-    {
-      title: "Monster Hard",
-      date: "2021-06-06T16:25:42.168Z",
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex odio sed incidunt expedita explicabo a provident repellat illo nemo, ea totam natus eius nulla cumque, obcaecati consequatur consectetur? Placeat, nemo?",
-      place: "Platanale 46, Horsens",
-      distance: "21.1 km",
-    },
-  ],
-};
-
 const RaceSelection: React.FC = () => {
   const classes = useStyles();
-  const years = Object.keys(mockRaceObject);
-  const [races, setRaces] = useState<any[]>(mockRaceObject[years[0]]);
+  const ctx = useContext(GlobalContext);
+  const years = Object.keys(ctx.racesByYear);
+  const [races, setRaces] = useState<any[]>(ctx.racesByYear[years[0]]);
   const [selectedYearIndex, setSelectedYearIndex] = useState(0);
   const [selectedRace, setSelectedRace] = useState(0);
-  const { url, path } = useRouteMatch();
+  const { url } = useRouteMatch();
   let { dest } = useParams();
 
   const flkty = useRef<Flickity>();
@@ -217,19 +180,23 @@ const RaceSelection: React.FC = () => {
       if (cellIndex === undefined) {
         return;
       }
-
       flkty.current?.selectCell(cellIndex);
-      setSelectedRace(flkty.current!.selectedIndex);
     });
+    flkty.current.on("settle", function (cellIndex) {
+      ctx.setSelectedRace(races[Number(cellIndex)]);
+    });
+    // If possible select second index to make the page look better ;)
     flkty.current.selectCell(1);
     setSelectedRace(flkty.current.selectedIndex);
+    ctx.setSelectedRace(races[flkty.current.selectedIndex]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [classes.gallery, races]);
 
   const changeYearBy = (n: number) => {
     const selectedYear = years[selectedYearIndex + n];
     if (selectedYear) {
       setSelectedYearIndex(selectedYearIndex + n);
-      const newRaces = cloneDeep(mockRaceObject[selectedYear]);
+      const newRaces = cloneDeep(ctx.racesByYear[selectedYear]);
       flkty.current?.destroy();
       setRaces(newRaces);
     }
@@ -245,7 +212,7 @@ const RaceSelection: React.FC = () => {
         <EventOutlinedIcon /> {formatDate(new Date(race.date))}
       </p>
       <p className="detail">
-        <DirectionsRunOutlinedIcon /> {race.distance}
+        <DirectionsRunOutlinedIcon /> {race.distances.join(", ")}
       </p>
       <p className="description">{race.description}</p>
       <UnstyledLink

@@ -9,13 +9,13 @@ const AppContainer = styled.div``;
 function App() {
   return (
     <AppContainer>
-      <GlobalContextProvider>
-        <Router>
+      <Router>
+        <GlobalContextProvider>
           <Switch>
             <Route path="/" component={Frontpage} />
           </Switch>
-        </Router>
-      </GlobalContextProvider>
+        </GlobalContextProvider>
+      </Router>
     </AppContainer>
   );
 }

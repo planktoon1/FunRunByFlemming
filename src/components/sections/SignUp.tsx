@@ -1,13 +1,12 @@
 import {
-  makeStyles,
-  TextField,
-  Select,
-  MenuItem,
   Button,
+  makeStyles,
+  MenuItem,
+  Select,
+  TextField,
 } from "@material-ui/core";
-import React, { useEffect, useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../../contexts/globalContext";
-import { useParams } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   /** Component Container */
@@ -82,22 +81,9 @@ const SignUp: React.FC = () => {
   const classes = useStyles();
   const ctx = useContext(GlobalContext);
   const [distance, setDistance] = useState<string>("");
-  let { raceid } = useParams();
-  useEffect(() => {
-    // If url contains race parameter load race from that
-    console.log(raceid);
-    if (raceid) {
-      const raceTitle = raceid.split(":")[1];
-      const choosenRace = ctx.allRaces.find((race) => race.title === raceTitle);
-      if (choosenRace) {
-        ctx.setSelectedRace(choosenRace);
-      }
-    }
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   useEffect(() => {
-    setDistance(ctx.selectedRace.distances[0]);
+    if (ctx.selectedRace) setDistance(ctx.selectedRace.distances[0]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ctx.selectedRace]);
 
@@ -111,7 +97,10 @@ const SignUp: React.FC = () => {
         <div className={classes.signUpGrid}>
           <div className={classes.text}>
             <h3>Tilmeld dig:</h3>
-            <h2>{ctx.selectedRace.title}</h2>
+            <h2>
+              {(ctx.selectedRace && ctx.selectedRace.title) ||
+                "Vælg et løb oven over"}
+            </h2>
           </div>
           <form className={classes.form} noValidate autoComplete="off">
             <TextField
@@ -147,7 +136,7 @@ const SignUp: React.FC = () => {
               value={distance}
               onChange={handleDistanceChange}
             >
-              {ctx.selectedRace.distances.map((dis) => (
+              {ctx.selectedRace?.distances.map((dis) => (
                 <MenuItem key={dis} value={dis}>
                   {dis}
                 </MenuItem>
@@ -158,6 +147,7 @@ const SignUp: React.FC = () => {
               fullWidth
               variant="contained"
               color="secondary"
+              disabled={!ctx.selectedRace}
               className={classes.submit}
             >
               Tilmeld!

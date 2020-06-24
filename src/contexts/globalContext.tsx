@@ -1,5 +1,6 @@
-import React, { createContext, useState } from "react";
-import { InputRace, RacesByYear, Race, RaceState } from "./globalModels";
+import React, { createContext, useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { InputRace, Race, RacesByYear, RaceState } from "./globalModels";
 const allRacesInput: InputRace[] = [
   {
     title: "Big Day Race",
@@ -64,7 +65,7 @@ const [racesByYear, allRaces] = processRaces(allRacesInput);
 interface Props {}
 
 interface GlobalContextI {
-  selectedRace: Race;
+  selectedRace: Race | undefined;
   setSelectedRace: (race: Race) => void;
   selectedYear: number;
   setSelectedYear: (year: number) => void;
@@ -82,11 +83,35 @@ export const GlobalContext = createContext<GlobalContextI>({
 });
 
 const GlobalContextProvider: React.FC<Props> = (props) => {
-  const [selectedRace, setSelectedRace2] = useState(allRaces[0]);
+  const [selectedRace, setSelectedRace2] = useState<Race | undefined>(
+    undefined
+  );
   const [selectedYear, setSelectedYear] = useState(2020);
+  const history = useHistory();
+
+  // On inital load check if url has selected a race, and make sure the state is set accordingly
+  useEffect(() => {
+    const urlParts = window.location.pathname.split("/");
+    // TODO: Scroll to #action
+    // TODO: Fix so that the correct year is also set
+    if (urlParts[1] === "race" && urlParts[2] && urlParts[3]) {
+      // Try to find the race specified in the url
+      const urlRace = allRaces.find(
+        (r) => r.title === decodeURI(urlParts[3]).replace(":", "")
+      );
+      if (urlRace) {
+        setSelectedRace2(urlRace);
+        setSelectedYear(new Date(urlRace.date).getFullYear());
+      }
+    }
+  }, []);
 
   const setSelectedRace = (race) => {
-    console.log("SELECTED A RACE");
+    const urlParts = window.location.pathname.split("/");
+    if (urlParts[1] === "race" && urlParts[2]) {
+      const dest = urlParts[2];
+      history.push(`/race/${dest}/:${encodeURI(race.title)}`);
+    }
 
     setSelectedRace2(race);
   };

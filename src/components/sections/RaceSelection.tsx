@@ -8,13 +8,7 @@ import PlaceOutlinedIcon from "@material-ui/icons/PlaceOutlined";
 import Flickity from "flickity";
 import cloneDeep from "lodash.clonedeep";
 import React, { useContext, useEffect, useRef, useState } from "react";
-import {
-  Route,
-  Switch,
-  useParams,
-  useRouteMatch,
-  useHistory,
-} from "react-router-dom";
+import { Route, Switch, useParams, useRouteMatch } from "react-router-dom";
 import { GlobalContext } from "../../contexts/globalContext";
 import { UnstyledLink } from "../../utility/link";
 import { theme } from "../../utility/theme";
@@ -161,14 +155,14 @@ const useStyles = makeStyles((theme) => ({
 const RaceSelection: React.FC = () => {
   const classes = useStyles();
   const ctx = useContext(GlobalContext);
+
   const years = Object.keys(ctx.racesByYear);
-  const [races, setRaces] = useState<any[]>(ctx.racesByYear[years[0]]);
   const [selectedYearIndex, setSelectedYearIndex] = useState(0);
-  const [selectedRace, setSelectedRace] = useState(
-    encodeURI(ctx.selectedRace.title)
-  );
-  const history = useHistory();
-  const { url, path } = useRouteMatch();
+  const INITIAL_YEAR = years[0];
+
+  const [races, setRaces] = useState<any[]>(ctx.racesByYear[INITIAL_YEAR]);
+
+  const { url } = useRouteMatch();
   let { dest } = useParams();
 
   const flkty = useRef<Flickity>();
@@ -194,25 +188,38 @@ const RaceSelection: React.FC = () => {
     flkty.current.on("settle", function (cellIndex) {
       const raceToBe = races[Number(cellIndex)];
       ctx.setSelectedRace(raceToBe);
-      setSelectedRace(encodeURI(raceToBe.title));
-      //history.push(`/race/${dest}/:${encodeURI(raceToBe.title)}`);
     });
-    // If possible select second index to make the page look better ;)
-    flkty.current.selectCell(1);
-    // ctx.setSelectedRace(races[flkty.current.selectedIndex]);
-    const raceTitleUri = encodeURI(races[flkty.current.selectedIndex].title);
-    setSelectedRace(raceTitleUri);
-    //history.push(`/race/${dest}/:${raceTitleUri}`);
+    if (!window.location.pathname.split("/")[3]) {
+      // If possible select second index to make the page look better ;)
+      flkty.current.selectCell(1);
+      ctx.setSelectedRace(races[flkty.current.selectedIndex]);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [classes.gallery, races]);
 
+  useEffect(() => {
+    const indexOfRace = races.findIndex(
+      (r) => r.title === ctx.selectedRace?.title
+    );
+    if (indexOfRace !== -1) {
+      flkty.current?.selectCell(indexOfRace);
+    }
+  }, [ctx.selectedRace]);
+
   const changeYearBy = (n: number) => {
-    const selectedYear = years[selectedYearIndex + n];
+    const index = selectedYearIndex + n;
+    changeYear(index);
+  };
+
+  const changeYear = (index) => {
+    const selectedYear = years[index];
     if (selectedYear) {
-      setSelectedYearIndex(selectedYearIndex + n);
+      setSelectedYearIndex(index);
       const newRaces = cloneDeep(ctx.racesByYear[selectedYear]);
       flkty.current?.destroy();
       setRaces(newRaces);
+      ctx.setSelectedRace(newRaces[1] ? newRaces[1] : newRaces[0]);
     }
   };
 
@@ -229,10 +236,7 @@ const RaceSelection: React.FC = () => {
         <DirectionsRunOutlinedIcon /> {race.distances.join(", ")}
       </p>
       <p className="description">{race.description}</p>
-      <UnstyledLink
-        to={`/race/${dest}/:${selectedRace}/#action`}
-        className="selectRace"
-      >
+      <UnstyledLink to={`/race/${dest}/#action`} className="selectRace">
         <KeyboardArrowDownOutlinedIcon
           style={{
             width: "3rem",

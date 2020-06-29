@@ -1,0 +1,50 @@
+service: funrun-by-flemming-backend
+
+provider:
+  name: aws
+  stage: ${opt:stage, 'dev'}
+  runtime: nodejs12.x
+  region: eu-central-1
+  timeout: 6 # optional, in seconds, default is 6
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+        - workspaces:CreateWorkspaces
+        - workspaces:DescribeWorkspaces
+        - dynamodb:PutItem
+        - dynamodb:GetItem
+        - dynamodb:Query
+        - SNS:Publish
+        - ses:SendEmail
+        - ses:SendRawEmail
+        - ec2:CreateNetworkInterface
+      Resource: "*"
+    - Effect: Allow
+      Action:
+        - sts:AssumeRole
+      Resource: arn:aws:iam::*:role/AccountReportRole
+  environment:
+    STAGE: ${self:provider.stage}
+
+functions:
+  workspaceApi:
+    handler: src/handlers/backend.api
+    events:
+      - http:
+          path: /api/{proxy+}
+          method: any
+          cors:
+            origin:
+              - "*"
+          timeout: 10
+
+resources:
+  Resources:
+    AccessReport:
+      Type: "AWS::DynamoDB::Table"
+      Properties: ${file(./config/dbconfig.json):properties}
+
+plugins:
+  - serverless-plugin-typescript

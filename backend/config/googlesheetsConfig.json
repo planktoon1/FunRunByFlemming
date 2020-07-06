@@ -1,5 +1,15 @@
 {
     "sheetIds": {
         "races": "1k1mSFrLWWHPAOt0rB0mU-V--ztfp15_RzhI99ywh6EY"
+    },
+    "cellMapping": {
+        "races": {
+            "Title": "A3",
+            "Distances": "B3",
+            "Description": "C3",
+            "Host": "D3",
+            "Place": "E3",
+            "Date": "F3"
+        }
     }
 }

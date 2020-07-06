@@ -1,7 +1,7 @@
 import cors from "cors";
 import express from "express";
 import serverless from "serverless-http";
-import APIRouter from "../api";
+import APIRouter from "../api/api";
 const morgan = require("morgan");
 // Register global express configs such as middleware that applies to all routes
 const app = express();

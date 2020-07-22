@@ -11,25 +11,19 @@ provider:
       Action:
         - lambda:InvokeFunction
         - lambda:InvokeAsync
-        - workspaces:CreateWorkspaces
-        - workspaces:DescribeWorkspaces
         - dynamodb:PutItem
         - dynamodb:GetItem
         - dynamodb:Query
+        - dynamodb:Scan
         - SNS:Publish
         - ses:SendEmail
         - ses:SendRawEmail
-        - ec2:CreateNetworkInterface
       Resource: "*"
-    - Effect: Allow
-      Action:
-        - sts:AssumeRole
-      Resource: arn:aws:iam::*:role/AccountReportRole
   environment:
     STAGE: ${self:provider.stage}
 
 functions:
-  workspaceApi:
+  publicApi:
     handler: src/handlers/backend.api
     events:
       - http:

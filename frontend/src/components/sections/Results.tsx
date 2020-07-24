@@ -1,16 +1,4 @@
-import {
-  Button,
-  makeStyles,
-  MenuItem,
-  Select,
-  TextField,
-} from "@material-ui/core";
-import React, { useContext, useEffect, useState } from "react";
-import { GlobalContext } from "../../contexts/globalContext";
-import MaterialTable from "material-table";
-
-// icons for table
-import { forwardRef } from "react";
+import { makeStyles, MenuItem, Select } from "@material-ui/core";
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
 import Check from "@material-ui/icons/Check";
@@ -26,6 +14,10 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
+import MaterialTable from "material-table";
+import React, { forwardRef, useContext, useEffect, useState } from "react";
+import { GlobalContext } from "../../contexts/globalContext";
+
 const tableIcons = {
   // @ts-ignore
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -73,7 +65,6 @@ const useStyles = makeStyles((theme) => ({
     margin: " 0 1rem",
   },
   section: {
-    overflowX: "hidden",
     minHeight: "100vh",
     width: "100%",
     scrollSnapAlign: "start",
@@ -87,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
     display: "grid",
     gridTemplateColumns: "1fr 1fr 1fr 1fr",
     gridTemplateRows: "0.5fr auto auto 1fr",
-    height: "100vh",
+    minHeight: "95vh",
     width: "100%",
     maxWidth: "60rem",
     margin: "0 1rem",
@@ -137,15 +128,34 @@ const useStyles = makeStyles((theme) => ({
 const Results: React.FC = () => {
   const classes = useStyles();
   const ctx = useContext(GlobalContext);
+  const [distances, setDistances] = useState<string[]>([]);
   const [distance, setDistance] = useState<string>("");
+  const [resultData, setResultData] = useState<
+    { contestantName: string; contestantTime: string }[]
+  >([]);
 
   useEffect(() => {
-    if (ctx.selectedRace) setDistance(ctx.selectedRace.distances[0]);
+    if (ctx.selectedRace) {
+      setDistance(ctx.selectedRace.distances[0]);
+      setResults(ctx.selectedRace.distances[0]);
+      setDistances(Object.keys(ctx.selectedRace.results));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ctx.selectedRace]);
 
   const handleDistanceChange = (e) => {
     setDistance(e.target.value);
+    setResults(e.target.value);
+  };
+
+  const setResults = (distance: string) => {
+    const currentResultdata = ctx.selectedRace?.results[distance];
+    if (currentResultdata) {
+      setResultData(currentResultdata);
+    } else {
+      setResultData([]);
+      //TODO: Snackbar warning no results..
+    }
   };
 
   return (
@@ -169,7 +179,7 @@ const Results: React.FC = () => {
               value={distance}
               onChange={handleDistanceChange}
             >
-              {ctx.selectedRace?.distances.map((dis) => (
+              {distances.map((dis) => (
                 <MenuItem key={dis} value={dis}>
                   {dis}
                 </MenuItem>
@@ -181,33 +191,12 @@ const Results: React.FC = () => {
               // @ts-ignore
               icons={tableIcons}
               columns={[
-                { title: "Navn", field: "name" },
-                { title: "Tid", field: "time" },
+                { title: "Navn", field: "contestantName" },
+                { title: "Tid", field: "contestantTime" },
               ]}
-              data={[
-                {
-                  name: "Charlotte Ullerup Sørensen",
-                  time: "02.07.59",
-                  placement: 1,
-                },
-                {
-                  name: "Søren Hasberg Thim",
-                  time: "02.11.26",
-                  placement: 2,
-                },
-                {
-                  name: "Vibeke Vigen",
-                  time: "02.18.10",
-                  placement: 3,
-                },
-                {
-                  name: "Anja Skjødt",
-                  time: "02.37.00",
-                  placement: 4,
-                },
-              ]}
+              data={resultData}
               title=""
-              options={{ pageSize: 10, pageSizeOptions: [10] }}
+              options={{ pageSize: 7, pageSizeOptions: [7] }}
             />
           </div>
         </div>

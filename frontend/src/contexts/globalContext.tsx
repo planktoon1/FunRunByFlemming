@@ -1,40 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { InputRace, Race, RacesByYear, RaceState } from "./globalModels";
-const allRacesInput: InputRace[] = [
-  {
-    title: "Big Day Race",
-    date: "2020-06-17T16:25:42.168Z",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex odio sed incidunt expedita explicabo a provident repellat illo nemo, ea totam natus eius nulla cumque, obcaecati consequatur consectetur? Placeat, nemo?",
-    place: "Platanale 46, Horsens",
-    distances: ["21.1 km", "10 km"],
-  },
-  {
-    title: "Super Fun Run",
-    date: "2020-10-17T16:25:42.168Z",
-    description:
-      "Lorem ipsum dolor sit amet consectetur a provident repellat illo nemo, ea totam natus eius nulla cumque, obcaecati consequatur consectetur? Placeat, nemo?",
-    place: "Platanale 46, Horsens",
-    distances: ["21.1 km", "5km"],
-  },
-  {
-    title: "Last Day of the Year",
-    date: "2020-12-31T16:25:42.168Z",
-    description:
-      "Ex odio sed incidunt expedita explicabo a provident repellat illo nemo, ea totam natus eius nulla cumque, obcaecati consequatur consectetur? Placeat, nemo?  incidunt expedita explicabo a provident repellat illo nemo, ea totam natus eius nulla cumque, obcaecati consequatur consectetur?",
-    place: "Platanale 46, Horsens",
-    distances: ["21.1 km"],
-  },
-  {
-    title: "Monster Hard",
-    date: "2021-06-06T16:25:42.168Z",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex odio sed incidunt expedita explicabo a provident repellat illo nemo, ea totam natus eius nulla cumque, obcaecati consequatur consectetur? Placeat, nemo?",
-    place: "Platanale 46, Horsens",
-    distances: ["21.1 km"],
-  },
-];
 
 // Create an alternative structure - races by year
 const processRaces = (races: Race[]): RacesByYear => {
@@ -126,6 +92,7 @@ const GlobalContextProvider: React.FC<Props> = (props) => {
     const urlParts = window.location.pathname.split("/");
     if (urlParts[1] === "race" && urlParts[2]) {
       const dest = urlParts[2];
+
       history.push(`/race/${dest}/:${encodeURI(race.title)}`);
     }
 

@@ -4,6 +4,12 @@ export interface InputRace {
   description: string;
   place: string;
   distances: string[];
+  results: {
+    [distance: string]: {
+      contestantName: string;
+      contestantTime: string;
+    }[];
+  };
 }
 
 export enum RaceState {

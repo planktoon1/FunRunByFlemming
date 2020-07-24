@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import { GoogleSpreadsheet } from "google-spreadsheet";
 import { scanDb } from "./services/db/scanDb";
 import config from "../../config";
+import { Race, RaceState } from "../models/races";
 
 const APIRouter = express.Router();
 
@@ -24,7 +25,29 @@ APIRouter.get("/races", async (req: Request, res: Response) => {
         },
       },
     });
-    return res.status(200).json(scanRes.Items);
+
+    if (!scanRes.Items) {
+      throw new Error(`No races found :(`);
+    }
+
+    // process race data
+    const races: Race[] = [];
+    for (const race of scanRes.Items) {
+      const raceDate = new Date(race.metaData.date);
+      const now = new Date();
+      races.push({
+        title: race.metaData.title,
+        date: race.metaData.date,
+        description: race.metaData.description,
+        place: race.metaData.place,
+        host: race.metaData.host,
+        distances: race.metaData.distances,
+        state: raceDate > now ? RaceState.ToBeHeld : RaceState.HasBeenHeld,
+        results: race.metaData.results,
+      });
+    }
+
+    return res.status(200).json(races);
   } catch (error) {
     console.error(error);
 

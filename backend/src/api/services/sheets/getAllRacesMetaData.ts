@@ -54,7 +54,12 @@ export const getAllRacesMetaData = async (): Promise<InputRace[]> => {
         continue;
       }
       const contestantName = sheet.getCellByA1(`B${currentRow}`).value;
-      const contestantTime = sheet.getCellByA1(`C${currentRow}`).value;
+      // @ts-ignore
+      const contestantTime = isNaN(sheet.getCellByA1(`C${currentRow}`).value)
+        ? sheet.getCellByA1(`C${currentRow}`).value
+        : numberToDate(sheet.getCellByA1(`C${currentRow}`).value)
+            .toISOString()
+            .substr(11, 8);
 
       const resultEntry = {
         contestantName,

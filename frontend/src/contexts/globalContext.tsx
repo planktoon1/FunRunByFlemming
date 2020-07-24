@@ -36,31 +36,23 @@ const allRacesInput: InputRace[] = [
   },
 ];
 
-const processRaces = (races: InputRace[]): [RacesByYear, Race[]] => {
+// Create an alternative structure - races by year
+const processRaces = (races: Race[]): RacesByYear => {
   const racesByYear: RacesByYear = {};
-  const allRaces: Race[] = [];
 
   for (const race of races) {
     const raceDate = new Date(race.date);
-    const now = new Date();
     const year = raceDate.getFullYear();
-    const raceOutput: Race = {
-      ...race,
-      state: raceDate > now ? RaceState.HasBeenHeld : RaceState.ToBeHeld,
-    };
 
-    allRaces.push(raceOutput);
     if (racesByYear[year]) {
-      racesByYear[year].push(raceOutput);
+      racesByYear[year].push(race);
     } else {
-      racesByYear[year] = [raceOutput];
+      racesByYear[year] = [race];
     }
   }
 
-  return [racesByYear, allRaces];
+  return racesByYear;
 };
-
-const [racesByYear, allRaces] = processRaces(allRacesInput);
 
 interface Props {}
 
@@ -74,12 +66,12 @@ interface GlobalContextI {
 }
 
 export const GlobalContext = createContext<GlobalContextI>({
-  selectedRace: allRaces[0],
+  selectedRace: undefined,
   setSelectedRace: () => {},
   selectedYear: 2020,
   setSelectedYear: () => {},
-  allRaces,
-  racesByYear,
+  allRaces: [],
+  racesByYear: {},
 });
 
 const GlobalContextProvider: React.FC<Props> = (props) => {
@@ -89,21 +81,45 @@ const GlobalContextProvider: React.FC<Props> = (props) => {
   const [selectedYear, setSelectedYear] = useState(2020);
   const history = useHistory();
 
-  // On inital load check if url has selected a race, and make sure the state is set accordingly
+  const [racesByYear, setRacesByYear] = useState<RacesByYear>({});
+  const [allRaces, setAllRaces] = useState<Race[]>([]);
+
   useEffect(() => {
-    const urlParts = window.location.pathname.split("/");
-    // TODO: Scroll to #action
-    // TODO: Fix so that the correct year is also set
-    if (urlParts[1] === "race" && urlParts[2] && urlParts[3]) {
-      // Try to find the race specified in the url
-      const urlRace = allRaces.find(
-        (r) => r.title === decodeURI(urlParts[3]).replace(":", "")
-      );
-      if (urlRace) {
-        setSelectedRace2(urlRace);
-        setSelectedYear(new Date(urlRace.date).getFullYear());
+    const fetchData = async () => {
+      const url = `${process.env.REACT_APP_BASE_URL}/races`;
+
+      try {
+        const response = await fetch(url, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        const json = await response.json();
+        setAllRaces(json);
+        setRacesByYear(processRaces(json));
+
+        console.log(json);
+
+        const urlParts = window.location.pathname.split("/");
+        // TODO: Fix so that the correct year is also set
+        if (urlParts[1] === "race" && urlParts[2] && urlParts[3]) {
+          // Try to find the race specified in the url
+          const urlRace = json.find(
+            (r) => r.title === decodeURI(urlParts[3]).replace(":", "")
+          );
+          if (urlRace) {
+            setSelectedRace2(urlRace);
+            setSelectedYear(new Date(urlRace.date).getFullYear());
+          }
+          document.getElementById("action")?.scrollIntoView();
+        }
+      } catch (error) {
+        // TODO: Make better error handling - snackbar
+        console.error("Error when fetching..");
       }
-    }
+    };
+    fetchData();
   }, []);
 
   const setSelectedRace = (race) => {

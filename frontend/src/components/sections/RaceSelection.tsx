@@ -167,6 +167,7 @@ const RaceSelection: React.FC = () => {
 
   const flkty = useRef<Flickity>();
   useEffect(() => {
+    flkty.current?.destroy();
     const galery = document.querySelector(`.${classes.gallery}`);
     flkty.current = new Flickity(galery!, {
       cellAlign: "left",
@@ -199,13 +200,19 @@ const RaceSelection: React.FC = () => {
   }, [classes.gallery, races]);
 
   useEffect(() => {
-    const indexOfRace = races.findIndex(
-      (r) => r.title === ctx.selectedRace?.title
-    );
-    if (indexOfRace !== -1) {
-      flkty.current?.selectCell(indexOfRace);
+    if (races) {
+      const indexOfRace = races.findIndex(
+        (r) => r.title === ctx.selectedRace?.title
+      );
+      if (indexOfRace !== -1) {
+        flkty.current?.selectCell(indexOfRace);
+      }
     }
   }, [ctx.selectedRace]);
+
+  useEffect(() => {
+    setRaces(ctx.racesByYear[INITIAL_YEAR]);
+  }, [ctx.racesByYear]);
 
   const changeYearBy = (n: number) => {
     const index = selectedYearIndex + n;
@@ -223,7 +230,7 @@ const RaceSelection: React.FC = () => {
     }
   };
 
-  const raceElements = races.map((race, i) => (
+  const raceElements = races?.map((race, i) => (
     <div key={i} className={classes.raceCard}>
       <h2>{race.title}</h2>
       <p className="detail">

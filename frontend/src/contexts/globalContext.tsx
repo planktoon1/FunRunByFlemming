@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
-import { InputRace, Race, RacesByYear, RaceState } from "./globalModels";
+import { Race, RacesByYear } from "./globalModels";
 
 // Create an alternative structure - races by year
 const processRaces = (races: Race[]): RacesByYear => {

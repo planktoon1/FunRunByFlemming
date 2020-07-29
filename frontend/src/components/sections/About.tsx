@@ -4,12 +4,7 @@ import React, { useEffect } from "react";
 const useStyles = makeStyles((theme) => ({
   /** Component Container */
   container: {
-    // scrollSnapType: "y proximity",
-    // // overflowY: "scroll",
-    // maxHeight: "100vh",
-    height: "100vh",
-    backgroundColor: theme.palette.secondary.light,
-    scrollSnapAlign: "start",
+    minHeight: "30rem",
   },
 
   /*  END Navigation cards */

@@ -208,11 +208,11 @@ const RaceSelection: React.FC = () => {
         flkty.current?.selectCell(indexOfRace);
       }
     }
-  }, [ctx.selectedRace]);
+  }, [ctx.selectedRace, races]);
 
   useEffect(() => {
     setRaces(ctx.racesByYear[INITIAL_YEAR]);
-  }, [ctx.racesByYear]);
+  }, [ctx.racesByYear, INITIAL_YEAR]);
 
   const changeYearBy = (n: number) => {
     const index = selectedYearIndex + n;

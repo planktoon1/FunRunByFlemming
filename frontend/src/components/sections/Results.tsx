@@ -78,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
     display: "grid",
     gridTemplateColumns: "1fr 1fr 1fr 1fr",
     gridTemplateRows: "0.5fr auto auto 1fr",
-    minHeight: "95vh",
+
     width: "100%",
     maxWidth: "60rem",
     margin: "0 1rem",

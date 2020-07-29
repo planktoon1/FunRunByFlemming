@@ -30,16 +30,14 @@ theme.overrides = {
   MuiCssBaseline: {
     "@global": {
       html: {
+        overflowY: "scroll",
+        scrollSnapType: "y proximity",
+        scrollBehavior: "smooth",
         [theme.breakpoints.down("sm")]: {
           fontSize: "12px",
         },
       },
-      "#root": {
-        maxHeight: "100vh",
-        overflowY: "auto",
-        scrollSnapType: "y proximity",
-        scrollBehavior: "smooth",
-      },
+      body: {},
     },
   },
 };

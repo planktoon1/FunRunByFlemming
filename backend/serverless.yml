@@ -34,6 +34,20 @@ functions:
               - "*"
           timeout: 10
 
+  privateApi:
+    handler: src/handlers/privateBackend.api
+    events:
+      - http:
+          path: /admin/api/{proxy+}
+          method: any
+          cors:
+            origin:
+              - "*"
+          timeout: 10
+          authorizer:
+            name: authorizer
+            arn: arn:aws:cognito-idp:eu-central-1:652080369647:userpool/eu-central-1_vyQqi1bDt
+
 resources:
   Resources:
     AccessReport:

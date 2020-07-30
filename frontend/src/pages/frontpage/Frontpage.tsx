@@ -1,8 +1,8 @@
-import { makeStyles } from "@material-ui/core";
+import { makeStyles, Button } from "@material-ui/core";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import React, { useEffect } from "react";
-import { Route, Switch } from "react-router-dom";
+import React, { useEffect, useContext } from "react";
+import { Route, Switch, useHistory } from "react-router-dom";
 import cameraSvg from "../../assets/icons/camera.svg";
 import registerSvg from "../../assets/icons/register.svg";
 import shoesSvg from "../../assets/icons/shoes.svg";
@@ -12,6 +12,7 @@ import road1 from "../../assets/images/road1.jpg";
 import About from "../../components/sections/About";
 import RaceSelection from "../../components/sections/RaceSelection";
 import { UnstyledLink } from "../../utility/link";
+import { GlobalContext, DataMode } from "../../contexts/globalContext";
 gsap.defaults({
   ease: "expo",
 });
@@ -123,12 +124,24 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "1.3rem",
     textAlign: "center",
   },
+  disclaimerBanner: {
+    position: "fixed",
+    top: "10px",
+    opacity: "0.6",
+    left: "0",
+    width: "100%",
+    backgroundColor: "orange",
+    fontSize: "2rem",
+    zIndex: 1,
+    padding: "0.8rem",
+  },
   /*  END Navigation cards */
 }));
 
 const Frontpage: React.FC = () => {
   const classes = useStyles();
-
+  const { dataMode } = useContext(GlobalContext);
+  const history = useHistory();
   useEffect(() => {
     // Animate navigation cards
     gsap.fromTo(
@@ -172,6 +185,21 @@ const Frontpage: React.FC = () => {
 
   return (
     <div className={classes.container}>
+      {dataMode === DataMode.AdminPreview && (
+        <div className={classes.disclaimerBanner}>
+          FORHÅNDSVISNING
+          <Button
+            variant="outlined"
+            style={{ float: "right" }}
+            onClick={() => {
+              history.push(`/admin`);
+            }}
+          >
+            Tilbage til Admin
+          </Button>
+        </div>
+      )}
+
       <div className={classes.landingImage}>
         <img
           alt="Fun Run by Flemming"

@@ -16,14 +16,14 @@ function App() {
   return (
     <AppContainer>
       <Router>
-        <GlobalContextProvider>
-          <AuthContextProvider>
+        <AuthContextProvider>
+          <GlobalContextProvider>
             <Switch>
               <Route path="/admin" component={Adminpage} />
               <Route path="/" component={Frontpage} />
             </Switch>
-          </AuthContextProvider>
-        </GlobalContextProvider>
+          </GlobalContextProvider>
+        </AuthContextProvider>
       </Router>
     </AppContainer>
   );

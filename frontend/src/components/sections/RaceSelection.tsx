@@ -190,7 +190,7 @@ const RaceSelection: React.FC = () => {
       const raceToBe = races[Number(cellIndex)];
       ctx.setSelectedRace(raceToBe);
     });
-    if (!window.location.pathname.split("/")[3]) {
+    if (!window.location.pathname.split("/")[3] && races) {
       // If possible select second index to make the page look better ;)
       flkty.current.selectCell(1);
       ctx.setSelectedRace(races[flkty.current.selectedIndex]);

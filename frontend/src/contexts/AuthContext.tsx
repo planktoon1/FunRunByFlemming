@@ -73,6 +73,7 @@ const AuthContextProvider = (props) => {
   const authFetch = async function (endpoint) {
     try {
       const token = getToken();
+      console.log(token);
 
       if (!token) {
         throw new Error("Attempting to get token, but no session");

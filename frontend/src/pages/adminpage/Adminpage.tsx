@@ -1,4 +1,13 @@
-import { Button, makeStyles } from "@material-ui/core";
+import {
+  Button,
+  makeStyles,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Icon,
+} from "@material-ui/core";
+import MenuIcon from "@material-ui/icons/Menu";
 import React, { useContext } from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
 import Dashboard from "../../components/adminpage/Dashboard";
@@ -8,9 +17,10 @@ import PrivateRoute from "./PrivateRoute";
 
 const useStyles = makeStyles((theme) => ({
   /** Component Container */
-  container: {},
+  container: {
+    minHeight: "100vh",
+  },
   section: {
-    height: "100vh",
     minHeight: "45rem",
     scrollSnapAlign: "start",
     backgroundColor: "white",
@@ -42,27 +52,19 @@ const useStyles = makeStyles((theme) => ({
 
     boxSizing: "border-box",
   },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  title: {
+    flexGrow: 1,
+  },
 }));
 
 const Adminpage: React.FC = () => {
-  const { logout, authFetch } = useContext(AuthContext);
+  const { logout } = useContext(AuthContext);
   const classes = useStyles();
   const history = useHistory();
 
-  const onCheckSes = async () => {
-    try {
-      const res = await authFetch(
-        "https://r69zf4k5cc.execute-api.eu-central-1.amazonaws.com/dev/admin/api/test"
-      );
-
-      console.log(res);
-
-      // const session = getSession();
-      // console.log(session);
-    } catch (error) {
-      console.error(error);
-    }
-  };
   const onLogOut = async () => {
     await logout();
     history.push(`/admin/login`);
@@ -70,29 +72,32 @@ const Adminpage: React.FC = () => {
 
   return (
     <div className={classes.container}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            edge="start"
+            className={classes.menuButton}
+            color="inherit"
+            aria-label="menu"
+            onClick={() => {
+              history.push(`/admin`);
+            }}
+          >
+            <MenuIcon></MenuIcon>
+          </IconButton>
+          <Typography variant="h6" className={classes.title}>
+            Fun Run By Flemming - Administrator
+          </Typography>
+          <Button color="inherit" onClick={onLogOut}>
+            Log ud
+          </Button>
+        </Toolbar>
+      </AppBar>
       <div className={classes.section}>
         <Switch>
           <Route path={`/admin/login`} component={Login} />
           <PrivateRoute path="/" component={Dashboard} />
         </Switch>
-        <Button
-          fullWidth
-          variant="contained"
-          color="secondary"
-          onClick={onCheckSes}
-          className={classes.submit}
-        >
-          check sess
-        </Button>
-        <Button
-          fullWidth
-          variant="contained"
-          color="secondary"
-          onClick={onLogOut}
-          className={classes.submit}
-        >
-          logout
-        </Button>
       </div>
     </div>
   );

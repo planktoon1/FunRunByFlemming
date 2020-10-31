@@ -3,7 +3,6 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import React, { useEffect, useContext } from "react";
 import { Route, Switch, useHistory } from "react-router-dom";
-import cameraSvg from "../../assets/icons/camera.svg";
 import registerSvg from "../../assets/icons/register.svg";
 import shoesSvg from "../../assets/icons/shoes.svg";
 import aboutSvg from "../../assets/icons/user.svg";
@@ -70,18 +69,18 @@ const useStyles = makeStyles((theme) => ({
   /** Navigation cards */
   introductionSectionGrid: {
     display: "grid",
-    gridTemplateColumns: "1fr 1fr 1fr 1fr",
+    gridTemplateColumns: "1fr 1fr 1fr",
     gridTemplateRows: "1fr auto auto 1fr auto 1fr",
     margin: "0 1rem",
     maxWidth: "45rem",
     height: "100%",
     gridGap: "1.2rem",
     gridTemplateAreas: [
-      '". . . ."',
-      '"introText introText introText introText"',
-      '". . . ."',
-      '"register results pictures about"',
-      '". . . ."',
+      '". . ."',
+      '"introText introText introText"',
+      '". . ."',
+      '"register results about"',
+      '". . ."',
     ].join(""),
   },
   navigationCard: {
@@ -185,7 +184,7 @@ const Frontpage: React.FC = () => {
 
   return (
     <div className={classes.container}>
-      {dataMode === DataMode.AdminPreview && (
+      {/* {dataMode === DataMode.AdminPreview && (
         <div className={classes.disclaimerBanner}>
           FORHÅNDSVISNING
           <Button
@@ -198,7 +197,7 @@ const Frontpage: React.FC = () => {
             Tilbage til Admin
           </Button>
         </div>
-      )}
+      )} */}
 
       <div className={classes.landingImage}>
         <img
@@ -216,7 +215,7 @@ const Frontpage: React.FC = () => {
               <h1 className={classes.introTitle}>Velkommen til holdet</h1>
 
               <p className={classes.introBody}>
-                Her er det vores passion for at løbe er der bringer os sammen.{" "}
+                Her er det vores passion for at løbe der bringer os sammen.{" "}
                 <br />
                 Deltag ved at tilmelde dig herunder
               </p>
@@ -244,13 +243,13 @@ const Frontpage: React.FC = () => {
               <img alt="Resultater" className={classes.icon} src={shoesSvg} />
               <div className={classes.navigationCardtext}>Resultater</div>
             </UnstyledLink>
-            <UnstyledLink
+            {/* <UnstyledLink
               to={`/race/pictures/#raceselection`}
               className={`${classes.navigationCard} ${classes.cardPictures}`}
             >
               <img alt="Billeder" className={classes.icon} src={cameraSvg} />
               <div className={classes.navigationCardtext}>Billeder</div>
-            </UnstyledLink>
+            </UnstyledLink> */}
             <UnstyledLink
               to={`/about/#about`}
               className={`${classes.navigationCard} ${classes.cardAbout}`}

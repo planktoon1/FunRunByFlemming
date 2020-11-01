@@ -1,27 +1,13 @@
 {
-  "name": "react-pixi",
+  "name": "funrunbyflemming",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@inlet/react-pixi": "^4.1.0",
-    "@material-ui/core": "^4.10.2",
-    "@material-ui/icons": "^4.9.1",
-    "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.3.2",
-    "@testing-library/user-event": "^7.1.2",
-    "@types/flickity": "^2.2.3",
-    "@types/jest": "^24.0.0",
-    "@types/lodash.clonedeep": "^4.5.6",
-    "@types/node": "^12.0.0",
-    "@types/react": "^16.9.0",
-    "@types/react-dom": "^16.9.0",
-    "@types/react-router-dom": "^5.1.5",
     "amazon-cognito-identity-js": "^4.3.3",
     "flickity": "^2.2.1",
     "gsap": "file:gsap-bonus.tgz",
     "lodash.clonedeep": "^4.5.0",
     "material-table": "^1.62.0",
-    "pixi.js": "^5.2.1",
     "rainbowvis.js": "^1.0.1",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
@@ -55,6 +41,18 @@
     ]
   },
   "devDependencies": {
+    "@material-ui/core": "^4.10.2",
+    "@material-ui/icons": "^4.9.1",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.3.2",
+    "@testing-library/user-event": "^7.1.2",
+    "@types/flickity": "^2.2.3",
+    "@types/jest": "^24.0.0",
+    "@types/lodash.clonedeep": "^4.5.6",
+    "@types/node": "^12.0.0",
+    "@types/react": "^16.9.0",
+    "@types/react-dom": "^16.9.0",
+    "@types/react-router-dom": "^5.1.5",
     "@types/styled-components": "^5.0.1"
   }
 }

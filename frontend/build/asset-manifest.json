@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.js": "/static/js/main.868f6f27.chunk.js",
+    "main.js.map": "/static/js/main.868f6f27.chunk.js.map",
+    "runtime-main.js": "/static/js/runtime-main.da1f3d8c.js",
+    "runtime-main.js.map": "/static/js/runtime-main.da1f3d8c.js.map",
+    "static/js/2.1789b2de.chunk.js": "/static/js/2.1789b2de.chunk.js",
+    "static/js/2.1789b2de.chunk.js.map": "/static/js/2.1789b2de.chunk.js.map",
+    "index.html": "/index.html",
+    "precache-manifest.4628869e23bef94c2813373d72af63e6.js": "/precache-manifest.4628869e23bef94c2813373d72af63e6.js",
+    "service-worker.js": "/service-worker.js",
+    "static/js/2.1789b2de.chunk.js.LICENSE.txt": "/static/js/2.1789b2de.chunk.js.LICENSE.txt",
+    "static/media/FUNRUNBYFLEMMING-original.svg": "/static/media/FUNRUNBYFLEMMING-original.3b72effe.svg",
+    "static/media/avatar2.png": "/static/media/avatar2.9a8c10bb.png",
+    "static/media/register.svg": "/static/media/register.0fe15132.svg",
+    "static/media/road1.jpg": "/static/media/road1.77c893a7.jpg",
+    "static/media/runsammen.jpg": "/static/media/runsammen.c1bad537.jpg",
+    "static/media/shoes.svg": "/static/media/shoes.1e7aadac.svg",
+    "static/media/user.svg": "/static/media/user.9930e840.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.da1f3d8c.js",
+    "static/js/2.1789b2de.chunk.js",
+    "static/js/main.868f6f27.chunk.js"
+  ]
+}

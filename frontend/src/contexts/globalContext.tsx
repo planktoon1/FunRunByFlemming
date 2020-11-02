@@ -93,14 +93,9 @@ const GlobalContextProvider: React.FC<Props> = (props) => {
           }
         } else {
           // ####### PRIVATE ENDPOINT PAGE #########
-          console.log("Admin page preview data...");
-
-          const url = `${process.env.REACT_APP_BASE_URL}/admin/api/races`;
-          const response = await authFetch(url);
-          setAllRaces(response);
-          setRacesByYear(processRaces(response));
-
-          console.log(response);
+          if (dataMode === DataMode.AdminPreview) {
+            setDataMode(DataMode.Public);
+          }
         }
       } catch (error) {
         // TODO: Make better error handling - snackbar

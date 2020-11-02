@@ -1,4 +1,6 @@
 # FunRunByFlemming
+Demo: https://funrundemo.netlify.app/
+
 Inspired by my dads running races i created this website. 
 However at some point i decided i wanted to redo the entire thing, and build another version where content management and responsiveness would be the main focus.
 

@@ -82,7 +82,7 @@ const About: React.FC = () => {
         <h1 style={{ marginTop: "0"}}>Hej<br/> Jeg er Flemming</h1>
         <p>Jeg er født i 1966 - så må du selv lige regne på alderen, den trykker ikke ;o)</p>
         <p>Jeg er løber - motionsløber. Jeg bliver aldrig hurtig, men jeg kan løbe både kort og langt. Jeg løber glad, både for mig selv og i socialt selskab med andre løber. Løb og fællesskab motiverer og inspirerer mig.</p>
-        <p>Mit løbeliv startede i 2013 - fra absolut intet. Første "løb" var på en gåtur, hvor tanken  "Hvor langt kan jeg egentlig løbe" slog ned i mig => 300m var svaret, inden ben og åndedræt påstod jeg var tæt på noget grueligt grimt.</p>
+        <p>Mit løbeliv startede i 2013 - fra absolut intet. Første "løb" var på en gåtur, hvor tanken  "Hvor langt kan jeg egentlig løbe" slog ned i mig ={'>'} 300m var svaret, inden ben og åndedræt påstod jeg var tæt på noget grueligt grimt.</p>
         <p>Men begyndte at flette små løbepas på mine gåture - med tiden blev der mere løb end gang.</p>
         <p>Løb mit første officielle 5 km løb i 2014.</p>
       </div>

@@ -163,6 +163,7 @@ const RaceSelection: React.FC = () => {
   const [races, setRaces] = useState<any[]>(ctx.racesByYear[INITIAL_YEAR]);
 
   const { url } = useRouteMatch();
+  // @ts-ignore
   let { dest } = useParams();
 
   const flkty = useRef<Flickity>();

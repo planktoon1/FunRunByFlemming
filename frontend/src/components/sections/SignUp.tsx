@@ -143,12 +143,16 @@ const SignUp: React.FC = () => {
               ))}
             </Select>
             <Button
-              type="submit"
               fullWidth
               variant="contained"
               color="secondary"
               disabled={!ctx.selectedRace}
               className={classes.submit}
+              onClick={() => {
+                console.log(
+                  `Okay fine, i'll sign you up for the imaginary race. Just because you looked in the console..`
+                );
+              }}
             >
               Tilmeld!
             </Button>

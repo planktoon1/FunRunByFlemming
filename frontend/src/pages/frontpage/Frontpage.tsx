@@ -1,8 +1,8 @@
-import { makeStyles, Button } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import React, { useEffect, useContext } from "react";
-import { Route, Switch, useHistory } from "react-router-dom";
+import React, { useEffect } from "react";
+import { Route, Switch } from "react-router-dom";
 import registerSvg from "../../assets/icons/register.svg";
 import shoesSvg from "../../assets/icons/shoes.svg";
 import aboutSvg from "../../assets/icons/user.svg";
@@ -11,7 +11,6 @@ import road1 from "../../assets/images/road1.jpg";
 import About from "../../components/sections/About";
 import RaceSelection from "../../components/sections/RaceSelection";
 import { UnstyledLink } from "../../utility/link";
-import { GlobalContext, DataMode } from "../../contexts/globalContext";
 gsap.defaults({
   ease: "expo",
 });
@@ -139,8 +138,6 @@ const useStyles = makeStyles((theme) => ({
 
 const Frontpage: React.FC = () => {
   const classes = useStyles();
-  const { dataMode } = useContext(GlobalContext);
-  const history = useHistory();
   useEffect(() => {
     // Animate navigation cards
     gsap.fromTo(

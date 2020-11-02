@@ -111,7 +111,7 @@ const GlobalContextProvider: React.FC<Props> = (props) => {
       }
     };
     fetchData();
-  }, [dataMode]);
+  }, [dataMode, authFetch]);
 
   const setSelectedRace = (race) => {
     const urlParts = window.location.pathname.split("/");

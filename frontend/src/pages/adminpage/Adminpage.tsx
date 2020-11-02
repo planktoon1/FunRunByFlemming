@@ -1,11 +1,10 @@
 import {
-  Button,
-  makeStyles,
   AppBar,
-  Toolbar,
+  Button,
   IconButton,
+  makeStyles,
+  Toolbar,
   Typography,
-  Icon,
 } from "@material-ui/core";
 import MenuIcon from "@material-ui/icons/Menu";
 import React, { useContext } from "react";

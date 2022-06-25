@@ -15,7 +15,7 @@
         "express": "^4.17.1",
         "google-spreadsheet": "^3.0.11",
         "morgan": "^1.10.0",
-        "node-fetch": "^2.6.0",
+        "node-fetch": "^2.6.7",
         "node-ssh": "^8.0.0",
         "serverless-http": "^2.4.1"
     },
